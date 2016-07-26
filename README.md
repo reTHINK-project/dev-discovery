@@ -27,8 +27,9 @@ Additional libs and configurations in order to run the discovery service:
  d)  Build and Run SolrJ
 	 Solr has API for java called SolrJ
 	
-	 Make sure to include solr-solrj-x.y.z.jar to the classpath at buildtime (its in the dist directory of you Solr installation)
-	 At runtime all libraries located in the dist directory have to available
+	 Make sure to include solr-solrj-x.y.z.jar to the classpath at build time 
+	 (its in the dist directory of you Solr installation)
+	 at runtime all libraries located in the dist directory have to be available
 	
 	 For more instruction read https://cwiki.apache.org/confluence/display/solr/Using+SolrJ
 	
@@ -42,12 +43,12 @@ Additional libs and configurations in order to run the discovery service:
 	
 2) Neo4J Setup
 
-	a) Download the community edition of Neo4J https://neo4j.com/download/ we used v 3.0.3
-	b) Follow installation guide according to you OS http://neo4j.com/docs/operations-manual/current/
+  a) Download the community edition of Neo4J https://neo4j.com/download/ we used v 3.0.3
+  b) Follow installation guide according to you OS http://neo4j.com/docs/operations-manual/current/
 	
 	During installation you will be asked for a DB name (default) and password (rethink).
 	
-	c) Change web.xml file accordingly
+  c) Change web.xml file accordingly
 	
 	<context-param>
 		<param-name>neo4jURL</param-name>
@@ -64,54 +65,78 @@ Additional libs and configurations in order to run the discovery service:
 	
 	you can check your installation by calling http://localhost:7474/browser/	
 	
-	d) downlaod neo4j-java-driver-1.0.0.jar at https://neo4j.com/developer/java/#neo4j-java-driver
-	e) make it available to the discovery service in build path and at runtime
+  d) downlodd neo4j-java-driver-1.0.0.jar at https://neo4j.com/developer/java/#neo4j-java-driver
+  e) make it available to the discovery service in build path and at runtime
 	
 3) Setup SQL database (e.g. MariaDB)
 
-		a) download and install MariaDB https://mariadb.org/ or MySQL or another SQL Database
+  a) download and install MariaDB https://mariadb.org/ or MySQL or another SQL Database
 		   tip: MariaDB comes with a Database browser HeidiSQL; it helps you to manage the Database
 		   use HeideSQL to create 2 tables
-		b) create a table 'user'
+  b) create a table 'user'
 			with create code
 			
-			CREATE TABLE `users` (
-						`userID` BIGINT(20) NOT NULL AUTO_INCREMENT,
-						`username` TEXT NULL,
-						`password` TINYTEXT NULL,
-						PRIMARY KEY (`userID`)
-			)
+	CREATE TABLE `users` 
+					(
+					`userID` BIGINT(20) NOT NULL AUTO_INCREMENT,
+					`username` TEXT NULL,
+					`password` TEXT NULL,
+					`salt` TEXT NULL,
+					PRIMARY KEY (`userID`)
+					)
 		COLLATE='latin1_swedish_ci'
 		ENGINE=InnoDB
-		AUTO_INCREMENT=57;
+		AUTO_INCREMENT=1;
 		
 		
-		c) create table 'profiles'
-		with create code
+  c) create table 'profiles'
+			with create code
 		
 		
-		CREATE TABLE `profiles` (
-		`docID` BIGINT(20) NOT NULL AUTO_INCREMENT,
-		`userID` BIGINT(20) NULL DEFAULT NULL,
-		`headline` TEXT NULL,
-		`description` TEXT NULL,
-		`hashtags` TEXT NULL,
-		`contacts` TEXT NULL,
-		`rethinkID` TEXT NULL,
-		INDEX `docID` (`docID`)
-		)
+	CREATE TABLE `profiles` 
+					(
+					`docID` BIGINT(20) NOT NULL AUTO_INCREMENT,
+					`userID` BIGINT(20) NULL DEFAULT NULL,
+					`headline` TEXT NULL,
+					`description` TEXT NULL,
+					`hashtags` TEXT NULL,
+					`contacts` TEXT NULL,
+					`rethinkID` TEXT NULL,
+					INDEX `docID` (`docID`)
+					)
 		COLLATE='latin1_swedish_ci'
 		ENGINE=InnoDB
-		AUTO_INCREMENT=70
-		;
+		AUTO_INCREMENT=1;
 		
+  d) download maria-db-java-client-1.4.5.jar driver at https://www.versioneye.com/java/org.mariadb.jdbc:mariadb-java-client/1.4.5	
 		
-		
-		d) download maria-db-java-client-1.4.5.jar driver at https://www.versioneye.com/java/org.mariadb.jdbc:mariadb-java-client/1.4.5	
-		e)  make mariadb-java-client-1.4.5.jar available at runtime
+  e)  make mariadb-java-client-1.4.5.jar available at runtime
+   
+  f) change web.xml file accordingly
+   
+   
+   
+	   	<context-param>
+			<param-name>MariaDBDriver</param-name>
+			<param-value>org.mariadb.jdbc.Driver</param-value>
+		</context-param>
+		<context-param>
+			<param-name>MariaDBConnection</param-name>
+			<param-value>jdbc:mariadb://localhost:3306/rethink</param-value>
+		</context-param>
+		<context-param>
+			<param-name>MariaDBname</param-name>
+			<param-value>root</param-value>
+		</context-param>
+		<context-param>
+			<param-name>MariaDBstring</param-name>
+			<param-value>rethink</param-value>
+		</context-param>
 	
 	
 4) Install JSON	H
 
-The service handles JSON Objects and uses json-simple-1.1.jar so download http://www.java2s.com/Code/Jar/j/json-simple.htm
-Include it in your buildpath / and at runtime
+The service handles JSON Objects and uses json-simple-1.1.jar 
+
+  a) download http://www.java2s.com/Code/Jar/j/json-simple.htm
+  b) Include it in your build path / and at runtime

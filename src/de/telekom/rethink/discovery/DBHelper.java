@@ -8,10 +8,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 public class DBHelper {
 	
@@ -144,24 +149,35 @@ FormularHelper formularHelper;
 	public int loginUser(String username, String password) throws ClassNotFoundException, SQLException 
 	{
 	int userID=0;
-	
-	int hashcode=password.trim().hashCode();
-	log.debug("pw hashcode login: "+hashcode);
-	
+	String securePassword = "";
+		
 	Class.forName(MariaDBDriver);
 	Connection con = DriverManager.getConnection(MariaDBConnection,MariaDBname,MariaDBstring);
 
 	Statement st= con.createStatement();
 	ResultSet rs;
+	ResultSet rs1;
 	ResultSet rs2;
 	
-	//lookup user
-	rs = st.executeQuery("SELECT * FROM users WHERE username ='"+username+"' AND password ='"+hashcode+"'");
+	
+	//get salt for that user
+	rs = st.executeQuery("SELECT * FROM users WHERE username ='"+username+"'");
 	
 	if(rs.next())
+		{
+		String saltBase64=rs.getString("salt");
+		byte[] salt = Base64.decodeBase64(saltBase64.getBytes());
+		securePassword = get_SHA_256_SecurePassword(password,salt);
+		}
+	
+	
+	//lookup user
+	rs1 = st.executeQuery("SELECT * FROM users WHERE username ='"+username+"' AND password ='"+securePassword+"'");
+	
+	if(rs1.next())
 	{
 		
-		rs2 = st.executeQuery("SELECT userID FROM users WHERE username ='"+username+"' AND password ='"+hashcode+"'");
+		rs2 = st.executeQuery("SELECT userID FROM users WHERE username ='"+username+"' AND password ='"+securePassword+"'");
 		if(rs2.next())
 			{	
 			userID = rs2.getInt("userID");
@@ -195,22 +211,29 @@ FormularHelper formularHelper;
 	return returnvalue;
 	}
 	
-	public int createUser(String username, String password) throws ClassNotFoundException, SQLException
+	public int createUser(String username, String password) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException, UnsupportedEncodingException
 	{
 	int userID=0;
 	
-	int hashcode=password.hashCode();
-	log.debug("pw hascode at register: "+hashcode);
+	//create salt
+	byte[] salt = getSalt();
+	//create sat as string
+	//String saltstring = new String(salt,"ISO-8859-1");
+	String saltBase64 = Base64.encodeBase64String(salt);
+	log.debug("pw hascode at register: "+saltBase64);
+	//create secure password
+	String securePassword = get_SHA_256_SecurePassword(password, salt);
+	log.debug("pw hascode at register: "+securePassword);
 	
 	
 	Class.forName(MariaDBDriver);
 	Connection con = DriverManager.getConnection(MariaDBConnection,MariaDBname,MariaDBstring);
 
 	java.sql.Statement statement= con.createStatement();
-	statement.executeUpdate("insert into users(username,password) values ('"+username+"','"+hashcode+"')"); 
+	statement.executeUpdate("insert into users(username,password,salt) values ('"+username+"','"+securePassword+"','"+saltBase64+"')"); 
 	
 	java.sql.Statement statement2 = con.createStatement();
-	ResultSet resultset = statement2.executeQuery("SELECT * FROM users WHERE password = '"+hashcode+"' and username = '"+username+"'");
+	ResultSet resultset = statement2.executeQuery("SELECT * FROM users WHERE password = '"+securePassword+"' and username = '"+username+"'");
 
 	while(resultset.next()){
 				userID = resultset.getInt("userID");
@@ -256,5 +279,37 @@ FormularHelper formularHelper;
 		log.info("Profile "+docID+" was updated in MariaDB.");
 	}
 	
+	
+	
+	private static String get_SHA_256_SecurePassword(String passwordToHash, byte[] salt)
+    {
+        String generatedPassword = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(salt);
+            byte[] bytes = md.digest(passwordToHash.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++)
+            {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            generatedPassword = sb.toString();
+        } 
+        catch (NoSuchAlgorithmException e) 
+        {
+            e.printStackTrace();
+        }
+        return generatedPassword;
+    }
+	
+	
+	//Add salt
+    private static byte[] getSalt() throws NoSuchAlgorithmException
+    {
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+        return salt;
+    }
 
 }

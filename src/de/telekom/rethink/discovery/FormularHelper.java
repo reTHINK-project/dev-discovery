@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -382,7 +383,7 @@ static Logger log = Logger.getLogger(FormularHelper.class);
 		return dbHelper.userAlreadyExistCheck(username);
 		}
 		
-		public int createUser(String username, String password) throws ClassNotFoundException, SQLException
+		public int createUser(String username, String password) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException, UnsupportedEncodingException
 		{
 		return dbHelper.createUser(username, password);
 		}
