@@ -40,7 +40,11 @@ java.util.Iterator<String> it = array.iterator();
 		helper.log("network error: "+nrex);
 		out.println("<h2>Network error!</2>");
 		}
-	
+	catch(Exception ex)
+		{
+		helper.log("general error: "+ex);
+		out.println("<h2>general error!</2>");
+		}
 	
    %>
 
