@@ -2,7 +2,7 @@
 
 This repository hosts the soure code of the reTHINK discovery service.
 
-Quick Guide Setup
+# Quick Guide Setup
 
 The environment for where the service was developed and tested:
 
@@ -27,9 +27,10 @@ Additional libs and configurations in order to run the discovery service:
  d)  Build and Run SolrJ
 	 Solr has API for java called SolrJ
 	
-	 Make sure to include solr-solrj-x.y.z.jar to the classpath at build time 
-	 (its in the dist directory of you Solr installation)
-	 at runtime all libraries located in the dist directory have to be available
+  Make sure to include solr-solrj-x.y.z.jar to the classpath at build time 
+  (its in the dist directory of you Solr installation)
+  at runtime all libraries located in the dist directory have to be available
+
 	
 	 For more instruction read https://cwiki.apache.org/confluence/display/solr/Using+SolrJ
 	
@@ -44,9 +45,10 @@ Additional libs and configurations in order to run the discovery service:
 2) Neo4J Setup
 
   a) Download the community edition of Neo4J https://neo4j.com/download/ we used v 3.0.3
-  b) Follow installation guide according to you OS http://neo4j.com/docs/operations-manual/current/
+  b) Follow installation guide according to you OS 
+	http://neo4j.com/docs/operations-manual/current/
 	
-	During installation you will be asked for a DB name (default) and password (rethink).
+   During installation you will be asked for a DB name (default) and password (rethink).
 	
   c) Change web.xml file accordingly
 	
@@ -70,12 +72,13 @@ Additional libs and configurations in order to run the discovery service:
 	
 3) Setup SQL database (e.g. MariaDB)
 
-  a) download and install MariaDB https://mariadb.org/ or MySQL or another SQL Database
-		   tip: MariaDB comes with a Database browser HeidiSQL; it helps you to manage the Database
-		   use HeideSQL to create 2 tables
-  b) create a table 'user'
-			with create code
-			
+
+ a) download and install MariaDB https://mariadb.org/ or MySQL or another SQL Database
+		   tip: MariaDB comes with a Database browser HeidiSQL; 
+		   it helps you to manage the Database
+		   Use HeideSQL to create 2 tables
+ b) create a table 'user'
+
 	CREATE TABLE `users` 
 					(
 					`userID` BIGINT(20) NOT NULL AUTO_INCREMENT,
@@ -88,27 +91,26 @@ Additional libs and configurations in order to run the discovery service:
 		ENGINE=InnoDB
 		AUTO_INCREMENT=1;
 		
-		
   c) create table 'profiles'
 			with create code
 		
 		
-	CREATE TABLE `profiles` 
-					(
-					`docID` BIGINT(20) NOT NULL AUTO_INCREMENT,
-					`userID` BIGINT(20) NULL DEFAULT NULL,
-					`headline` TEXT NULL,
-					`description` TEXT NULL,
-					`hashtags` TEXT NULL,
-					`contacts` TEXT NULL,
-					`rethinkID` TEXT NULL,
-					INDEX `docID` (`docID`)
-					)
-		COLLATE='latin1_swedish_ci'
-		ENGINE=InnoDB
-		AUTO_INCREMENT=1;
+			CREATE TABLE `profiles` (
+						`docID` BIGINT(20) NOT NULL AUTO_INCREMENT,
+						`userID` BIGINT(20) NULL DEFAULT NULL,
+						`headline` TEXT NULL,
+						`description` TEXT NULL,
+						`hashtags` TEXT NULL,
+						`contacts` TEXT NULL,
+						`rethinkID` TEXT NULL,
+						INDEX `docID` (`docID`)
+						)
+						COLLATE='latin1_swedish_ci'
+						ENGINE=InnoDB
+						AUTO_INCREMENT=70;
+>>>>>>> branch 'master' of https://github.com/reTHINK-project/dev-discovery.git
 		
-  d) download maria-db-java-client-1.4.5.jar driver at https://www.versioneye.com/java/org.mariadb.jdbc:mariadb-java-client/1.4.5	
+  d) download maria-db-java-client-1.4.5.jar driver at 	https://www.versioneye.com/java/org.mariadb.jdbc:mariadb-java-client/1.4.5	
 		
   e)  make mariadb-java-client-1.4.5.jar available at runtime
    
@@ -136,7 +138,6 @@ Additional libs and configurations in order to run the discovery service:
 	
 4) Install JSON	H
 
-The service handles JSON Objects and uses json-simple-1.1.jar 
 
-  a) download http://www.java2s.com/Code/Jar/j/json-simple.htm
-  b) Include it in your build path / and at runtime
+The service handles JSON Objects and uses json-simple-1.1.jar so download http://www.java2s.com/Code/Jar/j/json-simple.htm
+Include it in your buildpath / and at runtime
