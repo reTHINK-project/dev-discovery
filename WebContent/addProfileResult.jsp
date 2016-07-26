@@ -17,7 +17,7 @@ String description= helper.filteredDescription();
 String hashtags=helper.filteredHashtags();
 String contacts=helper.filteredContacts();
 String rethinkID = helper.filteredRethinkID();
-String visibility = helper.filteredVisibility();
+String visibility = helper.filteredVisibility(); 
 
 
 int userID = (int) session.getAttribute("userID");
