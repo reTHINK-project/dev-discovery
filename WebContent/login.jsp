@@ -31,7 +31,7 @@
 	<td class="spacer_2"></td>
    </tr>
    <tr>
-	<td colspan="2"><input name="password" type="text" placeholder="Password" class="log_input"/></td>
+	<td colspan="2"><input name="password" type="password" placeholder="Password" class="log_input"/></td>
    </tr>
    <tr>
 	<td class="spacer_2"></td>

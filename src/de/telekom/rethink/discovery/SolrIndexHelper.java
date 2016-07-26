@@ -235,22 +235,23 @@ FormularHelper formularHelper;
 	SolrClient solr = new HttpSolrClient(solrIndexURL);
 	SolrQuery query= new SolrQuery();
 	
-	//query.set("fl", searchString);
 	query.setFields("docID","headline","description","hashtags","contacts","hasrethinkID","rethinkID","instanceID");
 	query.set("q", searchString.trim());
 	query.setParam("debug","query");
 	query.setShowDebugInfo(true);
-	//query.set("q", "docID:62");
+	
 	
 	QueryResponse qr= solr.query(query);
 	
 		
 	SolrDocumentList dlist=qr.getResults();
 	long resultNumber= dlist.getNumFound();
-	log.info("number "+resultNumber);
-	log.info("score "+dlist.getMaxScore());
+	log.debug("number "+resultNumber);
+	log.info("Search needed "+qr.getElapsedTime()+" ms");
+
 	
-	qr.getDebugMap();
+	String test= qr.getDebugMap().toString();
+	log.debug("request debug info "+test);
 	
 	Iterator<SolrDocument> iter = dlist.iterator();
 	
@@ -263,7 +264,7 @@ FormularHelper formularHelper;
 	
 		for(@SuppressWarnings("unchecked")
 		Iterator<String> it= col.iterator();it.hasNext();)
-							log.info((String)it.next());
+							log.debug((String)it.next());
 					
 		
 		Hashtable<String,String> resultTable = new Hashtable<String,String>();

@@ -62,7 +62,7 @@ for (int i=0;i<profilecount;i++)
   
   	<% if(!profile.get("rethinkID").equals(""))
   		{%>
-    	<td width="100"><a href="connectGlobalRegistry.jsp?guid=<%out.print(helper.cleanUpString(profile.get("rethinkID").toString()));%>" target="_parent"><div class="rebutton">RETHINK</div></a></td>
+    	<td width="100"><a href="connectGlobalRegistry.jsp?guid=<%out.print(profile.get("rethinkID").toString());%>" target="_parent"><div class="rebutton">RETHINK</div></a></td>
     	<%} 
     %>
     <td class="rehead"><% out.print(profile.get("headline")); %></td>
