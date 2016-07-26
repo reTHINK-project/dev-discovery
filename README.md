@@ -2,7 +2,7 @@
 
 This repository hosts the soure code of the reTHINK discovery service.
 
-Quick Guide Setup
+# Quick Guide Setup
 
 The environment for where the service was developed and tested:
 
