@@ -12,9 +12,10 @@
 FormularHelper helper =new FormularHelper(request);
 
 String profileNr = request.getParameter("docID");
+String instanceID = request.getParameter("instanceID");
 int userID = (int) session.getAttribute("userID");
 String username = (String) session.getAttribute("userName");
-String instanceID =  request.getSession().getServletContext().getInitParameter("instanceID");
+//String instanceID =  request.getSession().getServletContext().getInitParameter("instanceID");
 
 if(!helper.favoriteAlreadyExist(userID,profileNr))
 {

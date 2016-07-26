@@ -18,7 +18,6 @@ body {
 }
 </style>
 </head>
-
 <body>
 <div id="mainframe">
 
@@ -62,18 +61,18 @@ for(Enumeration<Hashtable<String,String>> el=resultVector.elements();el.hasMoreE
 
 <div id="result_0<%out.print(i);%>">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-   <tr> 
+   <tr>
 <% 
 //4. 	check if rethinkID is available
 if(helper.cleanUpString(singleResult.get("hasrethinkID").toString()).equals("true"))
 {
-	%>
+%>
 	 <td width="100"><a href="connectGlobalRegistry.jsp?guid=<%out.print(helper.cleanUpString(singleResult.get("rethinkID").toString()));%>" target="_parent"><div class="rebutton">RETHINK</div></a></td>
-	<%
+<%
 }
-	; %>   
+	; %>  
     <td class="rehead"><%out.print(helper.cleanUpString(singleResult.get("headline").toString())); %></td>
-    <td width="50"><a href="favoritesResult.jsp?docID=<%out.print(helper.cleanUpString(singleResult.get("docID").toString())); %>" target="_parent" ><img src="images/star_01.png" width="33" height="33" class="star" /></a></td>
+    <td width="50"><a href="favoritesResult.jsp?docID=<%out.print(helper.cleanUpString(singleResult.get("docID").toString())); %>&instanceID=<%out.print(helper.cleanUpString(singleResult.get("instanceID").toString())); %>" target="_parent" ><img src="images/star_01.png" width="33" height="33" class="star" /></a></td>
   </tr>
 </table>
 <div class="spacer_2"></div>

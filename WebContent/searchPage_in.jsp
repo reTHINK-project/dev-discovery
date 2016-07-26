@@ -16,7 +16,6 @@ body {
 }
 </style>
 </head>
-
 <body>
 <div id="mainframe">
 
@@ -40,11 +39,9 @@ body {
 </table>
 </form>
 </div>
-
 <!--_____________________________FOOTER_____________________________-->
 <div id="logo"><img src="images/telekom.png" width="324" height="30" /></div>
 <div id="version">VERSION 0.1</div>
-
 </div>
 </body>
 </html>
