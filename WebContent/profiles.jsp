@@ -9,7 +9,7 @@
 
 <title>R E T H I N K</title>
 
-<script src="http://code.jquery.com/jquery-latest.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-latest.js" type="text/javascript"></script>
 
 <link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="css/style.css"/>

@@ -29,6 +29,7 @@
   	<url-pattern>/profiles.jsp</url-pattern>
   	<url-pattern>/searchPage_in.jsp</url-pattern>
   	<url-pattern>/searchResult_in.jsp</url-pattern>
+  	<url-pattern>/stats.jsp</url-pattern>
   </filter-mapping>
   
     <!-- configurations of error pages-->
@@ -119,7 +120,7 @@
 		<servlet-class>de.telekom.rethink.discovery.Log4jInitServlet</servlet-class>
 		<init-param>
 			<param-name>log4j-properties-location</param-name>
-			<param-value>WEB-INF/log4j.properties</param-value>
+			<param-value>WEB-INF/log4jToFile.properties</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet> 

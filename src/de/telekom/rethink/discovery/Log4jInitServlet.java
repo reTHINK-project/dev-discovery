@@ -16,7 +16,7 @@ public class Log4jInitServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void init(ServletConfig config) throws ServletException {
-		System.out.println("retTHINK search: Log4JInitServlet is initializing log4j");
+		System.out.println("retTHINK discovery: Log4JInitServlet is initializing log4j");
 		String log4jLocation = config.getInitParameter("log4j-properties-location");
 
 		ServletContext sc = config.getServletContext();
