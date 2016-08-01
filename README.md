@@ -18,10 +18,12 @@ Additional libraries and configurations in order to run the discovery service:
 	
  b.) Make sure to set JAVA_HOME environment varaible
 
- c.) Once Solr is installed create a core called "rethink"
+ c.) Once Solr is installed start solr and create a core called "rethink"
 	
    There might be differences btw. Linux and Windows to do this:
-   In windows it is done by command line  "solr create -c rethink"
+   In windows it is done by command line  
+   "solr start"
+   "solr create -c rethink"
 	
  d)  edit the solrIndexURL parameter in the web.xml file according to your setting
 
@@ -135,14 +137,17 @@ Tomcat 8.0.35
 Additional libraries and configurations in order to run the discovery service:
 
 1) Solr Setup
- a.) Download/Install Solr from www.apache.org/dyn/closer.lua/lucene/solr/6.0.0
+ a.) www.apache.org/dyn/closer.lua/lucene/solr/6.X.Y (look for latest version) I use 6.0.0
 	
  b.) Make sure to set JAVA_HOME environment varaible
 
  c.) Once Solr is installed create a core called "rethink"
 	
    There might be differences btw. Linux and Windows to do this:
-   In windows it is done by command line  "solr create -c rethink"
+   In windows it is done by command line  
+   "solr start"
+   "solr create -c rethink"
+ 
 
    you can check the rethink core by opening a browser and call
 	 http://localhost:8983/solr/rethink/select?q=*:*

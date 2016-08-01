@@ -346,6 +346,25 @@ FormularHelper formularHelper;
 	log.info("Search request for >> "+searchString+" << has result count of: "+returnVector.size()+" no policy");	
 	return returnVector;	
 	}
+	
+	public long indexedProfileCount() throws SolrServerException, IOException
+	{
+		SolrClient solr = new HttpSolrClient(solrIndexURL);
+  
+    	
+    
+    		SolrQuery query= new SolrQuery();
+    		
+    		query.set("q", "*:*");
+    		//query.set("fl", searchString);
+    		query.setFields("docID","headline","description");
+    		QueryResponse qr= solr.query(query);
+    		
+    		SolrDocumentList dlist=qr.getResults();
+    	
+    		return dlist.getNumFound();
+    		
+	}
 
 
 	public void indexProfile(int docID, String headline, String description, String hashtags, String contacts, String hasrethinkID, String rethinkID) throws SolrServerException, IOException

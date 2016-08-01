@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -16,6 +18,7 @@ import java.security.SecureRandom;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.solr.common.SolrDocument;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 public class DBHelper {
@@ -105,6 +108,46 @@ FormularHelper formularHelper;
 	}
 	
 	
+	public int getDBUserCount() throws ClassNotFoundException, SQLException
+	{
+	int count =-1;	
+		
+			Class.forName(MariaDBDriver);
+			Connection con = DriverManager.getConnection(MariaDBConnection,MariaDBname,MariaDBstring);
+
+			java.sql.Statement st= con.createStatement();
+			ResultSet rs;
+		
+			rs = st.executeQuery("SELECT COUNT(*) FROM users");
+		
+			
+			if(rs.next())
+			{
+				count = rs.getInt(1);
+				
+			}
+	return count; 
+	}
+	
+	public int getDBProfileCount() throws ClassNotFoundException, SQLException
+	{
+	int count = -1;	
+		Class.forName(MariaDBDriver);
+		Connection con = DriverManager.getConnection(MariaDBConnection,MariaDBname,MariaDBstring);
+
+			java.sql.Statement st= con.createStatement();	
+			ResultSet rs;
+			
+			rs = st.executeQuery("SELECT COUNT(*) FROM profiles");
+			
+			if(rs.next())
+			{
+				count =rs.getInt(1);	
+				
+			}
+	return count;		
+	}
+	
 	public int getProfileCount(int userID) throws ClassNotFoundException, SQLException
 	{
 		int count=0;
@@ -120,6 +163,8 @@ FormularHelper formularHelper;
 			{
 			count=count+1;
 			}
+		
+		
 		return count;
 		
 	}
@@ -209,6 +254,28 @@ FormularHelper formularHelper;
 		}
 	
 	return returnvalue;
+	}
+	
+	public List<Hashtable> getUserList() throws ClassNotFoundException, SQLException
+	{
+	Class.forName(MariaDBDriver);
+	Connection con = DriverManager.getConnection(MariaDBConnection,MariaDBname,MariaDBstring);
+
+	List<Hashtable> list = new ArrayList();
+	java.sql.Statement st= con.createStatement();	
+	ResultSet rs;
+			
+	rs = st.executeQuery("SELECT * FROM users");
+	
+	
+	while(rs.next())
+			{
+			Hashtable<String,String> resultTable = new Hashtable<String,String>();	
+			resultTable.put("userID", rs.getString("userID"));	
+			resultTable.put("username", rs.getString("username"));	
+			list.add(resultTable);	
+			}
+	return list;	
 	}
 	
 	public int createUser(String username, String password) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException, UnsupportedEncodingException

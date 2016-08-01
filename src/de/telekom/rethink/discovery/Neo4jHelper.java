@@ -167,7 +167,7 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 
 		dbsession.close();
 		driver.close();
-		log.info("UserNode "+userID+"was removed from Neo4j.");
+		log.info("UserNode "+userID+" was removed from Neo4j.");
 		
 	}
 	
@@ -261,6 +261,40 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 		
 		return returnString;
 	}
+	
+	
+	public int getProfileCount()
+	{
+	int returnValue = -1;
+	
+		org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
+		org.neo4j.driver.v1.Session dbsession =driver.session();
+
+		org.neo4j.driver.v1.StatementResult result = dbsession.run("MATCH (p:profile) RETURN p.id AS id" );
+		returnValue = result.list().size();
+
+		dbsession.close();
+		driver.close();
+		
+	return returnValue;	
+	}	
+	
+	public int getUserCount()
+	{
+	int returnValue = -1;
+	
+		org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
+		org.neo4j.driver.v1.Session dbsession =driver.session();
+
+		org.neo4j.driver.v1.StatementResult result = dbsession.run("MATCH (u:user) RETURN u.id AS id" );
+		returnValue = result.list().size();
+
+		dbsession.close();
+		driver.close();
+		
+	return returnValue;	
+	}	
+	
 	
 	
 }

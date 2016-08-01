@@ -221,6 +221,16 @@ static Logger log = Logger.getLogger(FormularHelper.class);
 		 * All these methods handle neo4j access
 		 * 
 		 */
+		public int getNeo4jProfileCount()
+		{
+			return neoHelper.getProfileCount();
+		}
+		
+		public int getNeo4jUserCount()
+		{
+			return neoHelper.getUserCount();
+		}
+		
 			
 		public boolean favoriteAlreadyExist(int userID,String docID)
 		{
@@ -328,6 +338,11 @@ static Logger log = Logger.getLogger(FormularHelper.class);
 		return solrHelper.getProfileFromSolr(docID);	
 		}
 		
+		public long indexProfileCount() throws SolrServerException, IOException
+		{
+			return solrHelper.indexedProfileCount();
+		}
+		
 
 		
 		/**************************************************************************
@@ -340,6 +355,20 @@ static Logger log = Logger.getLogger(FormularHelper.class);
 		 * 
 		 */
 		
+		public int getDBUserCount() throws ClassNotFoundException, SQLException
+		{
+		return dbHelper.getDBUserCount();
+		}
+		
+		public int getDBProfileCount() throws ClassNotFoundException, SQLException
+		{
+			return dbHelper.getDBProfileCount();
+		}
+		
+		public List<Hashtable> getUserList() throws ClassNotFoundException, SQLException
+		{
+			return dbHelper.getUserList();
+		}
 		
 		public List<Integer> getProfileNumbers(int userID) throws ClassNotFoundException, SQLException
 		{
