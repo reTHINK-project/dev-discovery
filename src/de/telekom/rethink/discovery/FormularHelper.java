@@ -59,6 +59,7 @@ static Logger log = Logger.getLogger(FormularHelper.class);
 		
 		public void logout(int userID)
 		{
+			neoHelper.setLogoutTime(userID);	
 			log.info("User "+userID+" logged out.");
 		}
 		
@@ -403,9 +404,34 @@ static Logger log = Logger.getLogger(FormularHelper.class);
 		
 		public int loginUser(String username, String password) throws ClassNotFoundException, SQLException 
 		{
+		neoHelper.setLoginTime(username);	
 		return dbHelper.loginUser(username, password);
 		}
 		
+		public String getLogoutTime(String username)
+		{
+			return neoHelper.getLogoutTime(username);
+		}
+		
+		public String getCreationTime(String username)
+		{
+		return neoHelper.getLoginTime(username);
+		}
+		
+		public String getLoginTime(String username)
+		{
+			return neoHelper.getLoginTime(username);
+		}
+		
+		public long getSessionTime(String username)
+		{
+			return neoHelper.getSessionTime(username);
+		}
+		
+		public long getTimeSinceLastSession(String username)
+		{
+			return neoHelper.getTimeSinceLastSession(username);
+		}
 		
 		public boolean userAlreadyExistCheck(String username) throws ClassNotFoundException, SQLException 
 		{

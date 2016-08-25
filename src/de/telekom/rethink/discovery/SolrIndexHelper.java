@@ -223,7 +223,8 @@ FormularHelper formularHelper;
 			
 		}
 	}	 
-	log.info("Search request for >> "+searchString+" << has result count of: "+returnVector.size()+" with policy");	
+	log.debug("Search request for >> "+searchString+" << has result count of: "+returnVector.size()+" with policy");	
+	log.info("SearchQuery: "+searchString);
 	return returnVector;
 	}
 	
@@ -247,7 +248,7 @@ FormularHelper formularHelper;
 	SolrDocumentList dlist=qr.getResults();
 	long resultNumber= dlist.getNumFound();
 	log.debug("number "+resultNumber);
-	log.info("Search needed "+qr.getElapsedTime()+" ms");
+	log.debug("Search needed "+qr.getElapsedTime()+" ms");
 
 	
 	String test= qr.getDebugMap().toString();
@@ -343,7 +344,7 @@ FormularHelper formularHelper;
 		}
 						
 	solr.close();
-	log.info("Search request for >> "+searchString+" << has result count of: "+returnVector.size()+" no policy");	
+	log.debug("Search request for >> "+searchString+" << has result count of: "+returnVector.size()+" no policy");	
 	return returnVector;	
 	}
 	

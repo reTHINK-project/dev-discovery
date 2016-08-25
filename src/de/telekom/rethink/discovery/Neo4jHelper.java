@@ -1,5 +1,8 @@
 package de.telekom.rethink.discovery;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +94,7 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 			
 		dbsession.close();
 		driver.close();
-		log.info("ProfileNode for docID "+docID+" created in Neo4j.");
+		log.info("Profile "+docID+" created in Neo4j.");
 		}
 	
 	
@@ -108,17 +111,152 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 		log.info("Changed visibility to  >> "+visibility+" << for node "+docID+" in Neo4j.");
 	}
 	
+	public void setLoginTime(String username)
+	{		
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	LocalDateTime dateTime = LocalDateTime.now();
+	String dateTimeString = dateTime.format(formatter); 
+				
+	org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
+	org.neo4j.driver.v1.Session dbsession =driver.session();
+
+	dbsession.run("MATCH (u:user {userName:'"+username+"'}) SET u.loggedIn='"+dateTimeString+"'");
+		
+	dbsession.close();
+	driver.close();
+	}
+	
+	
+	public long getSessionTime(String username)
+	{
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	
+	String login = getLoginTime(username);
+	String logout =getLogoutTime(username);
+	
+	LocalDateTime loginDate = LocalDateTime.parse(login, formatter);
+	LocalDateTime logoutDate = LocalDateTime.parse(logout, formatter);
+	
+	long diffinSeconds = Duration.between(loginDate, logoutDate).getSeconds();
+	
+	return diffinSeconds;
+	}
+	
+	public long getTimeSinceLastSession(String username)
+	{
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
+	LocalDateTime nowTime = LocalDateTime.now();
+	String logout =getLogoutTime(username);
+	LocalDateTime logoutDate = LocalDateTime.parse(logout, formatter);
+	
+	long diffinSeconds = Duration.between(logoutDate, nowTime).getSeconds();
+	
+	return diffinSeconds;
+	}
+	
+	
+	
+	public String getLoginTime(String username)
+	{
+	String logginTime = "";
+	org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
+	org.neo4j.driver.v1.Session dbsession =driver.session();
+
+	org.neo4j.driver.v1.StatementResult result = dbsession.run("Match (u:user) WHERE u.userName ='"+username+"' RETURN u.loggedIn AS loggedIn");
+		
+		//look in neo4j for visibility
+		while(result.hasNext())
+		{
+		org.neo4j.driver.v1.Record record = result.next();
+		logginTime=record.get("loggedIn").asString();
+		}
+		
+		dbsession.close();
+		driver.close();
+		log.debug("Return logginTime "+logginTime);
+		return logginTime;	
+		
+	}
+	
+	
+	public String getLogoutTime(String username)
+	{
+	String loggoutTime = "";
+	org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
+	org.neo4j.driver.v1.Session dbsession =driver.session();
+
+	org.neo4j.driver.v1.StatementResult result = dbsession.run("Match (u:user) WHERE u.userName ='"+username+"' RETURN u.loggedOut AS loggedOut");
+		
+		//look in neo4j for visibility
+		while(result.hasNext())
+		{
+		org.neo4j.driver.v1.Record record = result.next();
+		loggoutTime=record.get("loggedOut").asString();
+		}
+		
+		dbsession.close();
+		driver.close();
+		log.debug("Return loggoutTime "+loggoutTime);
+		return loggoutTime;	
+		
+	}
+	
+	
+	public String getCreationTime(String username)
+	{
+	String creationTime = "";
+	org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
+	org.neo4j.driver.v1.Session dbsession =driver.session();
+
+	org.neo4j.driver.v1.StatementResult result = dbsession.run("Match (u:user) WHERE u.userName ='"+username+"' RETURN u.created AS created");
+		
+	//look in neo4j for visibility
+	while(result.hasNext())
+		{
+		org.neo4j.driver.v1.Record record = result.next();
+		creationTime=record.get("created").asString();
+		}
+		
+	dbsession.close();
+	driver.close();
+	log.debug("Return creationTime "+creationTime);
+	return creationTime;		
+	}
+	
+	
+	public void setLogoutTime(int userID)
+	{
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	LocalDateTime dateTime = LocalDateTime.now();
+	String dateTimeString = dateTime.format(formatter); 
+				
+	org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
+	org.neo4j.driver.v1.Session dbsession =driver.session();
+
+	dbsession.run("MATCH (u:user {userID:'"+userID+"'}) SET u.loggedOut='"+dateTimeString+"'");
+		
+	dbsession.close();
+	driver.close();		
+	}
 	
 	public void createUserNode(int userID,String username)
 	{
-		org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
-		org.neo4j.driver.v1.Session dbsession =driver.session();
-
-		dbsession.run("CREATE (u:user {userID:'"+userID+"', userName:'"+username+"', nodeType:'user'})");
-		dbsession.close();
-		driver.close();	
+	java.util.Calendar calendar = java.util.Calendar.getInstance();
+	java.sql.Timestamp myJavaTimestampObject = new java.sql.Timestamp(calendar.getTime().getTime());
 		
-		log.info("UserNode "+userID+" for "+username+" created in Neo4j.");				
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	LocalDateTime dateTime = LocalDateTime.now();
+	String dateTimeString = dateTime.format(formatter); 
+			
+	org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
+	org.neo4j.driver.v1.Session dbsession =driver.session();
+
+	dbsession.run("CREATE (u:user {userID:'"+userID+"', userName:'"+username+"', created: '"+myJavaTimestampObject+"', loggedIn: '"+dateTimeString+"', loggedOut: '"+dateTimeString+"', nodeType:'user'})");
+	dbsession.close();
+	driver.close();	
+		
+	log.info("User "+userID+" created in Neo4j.");				
 	}
 	
 	public void createFavoriteRelation(int userID,String docID)

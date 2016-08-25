@@ -1,6 +1,90 @@
 # dev-discovery
 
 This repository hosts the soure code of the reTHINK discovery service.
+
+## overview
+
+reTHINK Discovery Service is basically a service to find other communication partner. We are used to use search engines like google when we want to find information about a certain topic. In the same way we can search for persons or also devices. We formulate a search query like “Michael Mueller T-Labs”  or “reTHINK Project” in order to find a so called profile of a person. Also queries like “who want’s to buy my Mercedes 220 SL “can lead to results. Although this service is easy to use like a classic search engine there are fundamental differences.
+
+**1)      Source of query results**
+
+Search results are profiles that are written by the user that want to be found. Results are not crawled or scanned in the Internet. Every user that wants to be found or that wants his devices to be found can create one or many profiles within the discovery service.
+
+These profiles stay fully under his control.
+
+**2)      Policy-based visibility**
+
+Every profile can be configured with a certain visibility. So the owner of a profile can configure which user or which group of users can see his profile.
+
+###Interfaces
+
+**Web-GUI**
+
+The reTHINK discovery has a Web-Interface for users that want to use reTHINK discovery with their browser like they are used to from a classic search-engine. Furthermore the web-GUI enables to create and manage profile accounts.
+
+**Rest-API** 
+
+Apart from a web interface reTHINK discovery also provides a RESTful API. This REST-interface enables applications and services to discovery communication endpoints of users without using the web-interface. So an developer can create his own application logic or design and is able to use reTHINK discovery in the background..
+
+# Quick guide user view
+
+##1) Plain web search
+
+The user can go to the [reTHINK Discovery Website ](https://rethink.tlabscloud.com/discovery/) and search for users or devices. The search results are so called profiles. 
+They have a headline and some text for description. They might have hashtags describing certain topics, communities, locations etc..
+Profiles can also contain communication endpoints like e-mail address, phone number, websites, facebook- or linkedin profile URLS.
+
+As an additional button within the profile there is a “reTHINK” button. If this kind of button is in the profile this means the owner of this profile has a “reTHINK”-ID (a.k.a GUID). 
+<<<in future versions>>>
+When this button is pushed it opens a list with different reTHINK end points. One can chose e.g. to write a chat-message, do a video-call or a voice-message. The availability of the options depends on what kind of reTHINK client is currently available for this user.
+
+ 
+##2) Create an own account
+
+Every user has the possibility to create an own account with the reTHINK discovery service.
+
+Press *LOGIN* button in the upper right corner. Then press *REGISTER* button
+ 
+Now opens up a Web-Formular to fill in:
+
+**Headline**
+The headline field is mandatory and should be a meaningful name for the profile.
+
+**Description**
+The description is also mandatory and should explain what the profile is about.
+
+**reTHINK ID**
+The reTHINK ID is an Identifier used to find current communication channels to reTHINK users(a.k.a GUID)
+
+**Contact Information**
+Here the user can put URLs that point to social networks or to the company homepage. (Please use full URLs e.g. http://www.my_company.com/)
+Also e-mail addresses, phone numbers and many other things can be inserted here.
+
+**Visibility**
+Here the user can choose between different visibility options:
+
+- all - means this profile is visible from all over the web
+- reTHINK - means that the profile is visible for all users that have an account at reTHINK discovery
+- Favorites - Ones the account is created and the user is logged in he can mark profiles of other users as favorites.
+   With the visibility option *all my Favorites* only those Favorites can see the profile. This option is a good way to
+   create closed or private user groups.
+ 
+**Tags**
+Here the user can add certain tags about topics, locations etc..
+
+**Username**
+The username is mandatory. It is not shown in the profile.
+
+**Password**
+Here the user should provide a password
+
+Now press the *save* button. If no error occur a user is created with a first profile.
+    
+(A user can have many profiles with different visibilities. Profiles can be added, changed or deleted. When the last profile is deleted the user is deleted automatically)    
+  
+
+
+
 # Quick Guide Setup for Deployment
 If you want to deploy discovery service read this section
 

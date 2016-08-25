@@ -278,6 +278,7 @@ FormularHelper formularHelper;
 	return list;	
 	}
 	
+	
 	public int createUser(String username, String password) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException, UnsupportedEncodingException
 	{
 	int userID=0;
@@ -307,7 +308,7 @@ FormularHelper formularHelper;
 		}
 	con.close();
 	
-	log.info("User "+username+" created with userID "+userID+" in MariaDB.");
+	log.info("User "+userID+" created ("+username+") in MariaDB.");
 	
 	return userID;	
 	}
@@ -330,7 +331,7 @@ FormularHelper formularHelper;
 			docID = resultset.getInt("docID");
 	}
 	con.close();
-	log.info("Profile "+headline+" with docID "+docID+" for user "+userID+" created in MariaDB.");
+	log.info("User "+userID+" created new Profile "+docID+" in MariaDB.");
 	
 	return docID;
 	}
