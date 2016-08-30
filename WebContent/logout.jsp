@@ -9,14 +9,17 @@
 </head>
 <body>
 <% 
+try{
 int userID = (int) session.getAttribute("userID");
 
 FormularHelper helper =new FormularHelper(request);
-
-session.setAttribute("userID",null);
-session.setAttribute("authenticated","false");
-
+if(session!=null)
+	{	
+	session.setAttribute("userID",null);
+	session.setAttribute("userName",null);
+	}
 helper.logout(userID);
+}catch(Exception ex){}
 
 response.sendRedirect("searchPage.jsp");
 %>

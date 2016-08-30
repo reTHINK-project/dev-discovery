@@ -1,3 +1,9 @@
+/********************************************************************************************************************
+ * Deutsche Telekom Laboratories																					*
+ * Copyright (c) 2016 European Project reTHINK																		*
+ * 																													*
+ ********************************************************************************************************************/
+
 package de.telekom.rethink.discovery;
 
 import java.io.File;
@@ -16,7 +22,7 @@ public class Log4jInitServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void init(ServletConfig config) throws ServletException {
-		System.out.println("retTHINK discovery: Log4JInitServlet is initializing log4j");
+		System.out.println("reTHINK discovery: Log4JInitServlet is initializing log4j");
 		String log4jLocation = config.getInitParameter("log4j-properties-location");
 
 		ServletContext sc = config.getServletContext();

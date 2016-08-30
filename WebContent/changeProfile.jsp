@@ -46,7 +46,7 @@ HashMap<String,String> profile = helper.getUserProfile(docID.trim());
 	<td colspan="2" class="spacer_1"></td>
    </tr>
    <tr>
-	<td colspan="2"><input name="headline"  placeholder="Enter Profile Headline" value="<% out.print(profile.get("headline")); %>" type="text" value="MAX MUSTERMANN" class="pname_input"/></td>
+	<td colspan="2"><input name="headline"  placeholder="Enter Profile Headline" value="<% out.print(profile.get("headline")); %>" type="text" class="pname_input"/></td>
    </tr>
    <tr>
 	<td class="spacer_2"></td>

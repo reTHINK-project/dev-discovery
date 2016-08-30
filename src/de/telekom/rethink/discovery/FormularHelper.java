@@ -1,3 +1,9 @@
+/********************************************************************************************************************
+ * Deutsche Telekom Laboratories																					*
+ * Copyright (c) 2016 European Project reTHINK																		*
+ * 																													*
+ ********************************************************************************************************************/
+
 package de.telekom.rethink.discovery;
 
 import javax.servlet.http.HttpServletRequest;
@@ -415,22 +421,22 @@ static Logger log = Logger.getLogger(FormularHelper.class);
 		
 		public String getCreationTime(String username)
 		{
-		return neoHelper.getLoginTime(username);
+		return neoHelper.getCreationTime(username);
 		}
 		
 		public String getLoginTime(String username)
 		{
 			return neoHelper.getLoginTime(username);
 		}
-		
+		/*
 		public long getSessionTime(String username)
 		{
 			return neoHelper.getSessionTime(username);
 		}
-		
-		public long getTimeSinceLastSession(String username)
+		*/
+		public long getTimeSinceLastLogin(String username)
 		{
-			return neoHelper.getTimeSinceLastSession(username);
+			return neoHelper.getTimeSinceLastLogin(username);
 		}
 		
 		public boolean userAlreadyExistCheck(String username) throws ClassNotFoundException, SQLException 

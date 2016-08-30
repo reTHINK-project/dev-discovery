@@ -1,3 +1,9 @@
+/********************************************************************************************************************
+ * Deutsche Telekom Laboratories																					*
+ * Copyright (c) 2016 European Project reTHINK																		*
+ * 																													*
+ ********************************************************************************************************************/
+
 package de.telekom.rethink.discovery;
 
 import java.time.Duration;
@@ -33,12 +39,12 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 
 	public boolean favoriteAlreadyExist(int userID,String docID)
 	{
-		boolean returnwert=false;
+	boolean returnwert=false;
 		
-		org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
-		org.neo4j.driver.v1.Session dbsession =driver.session();
+	org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(neo4jURL,AuthTokens.basic(neo4jDBname,neo4jDBstring));
+	org.neo4j.driver.v1.Session dbsession =driver.session();
 
-		org.neo4j.driver.v1.StatementResult result = dbsession.run("MATCH (u:user {userID:'"+userID+"'})-[r:favors]->(p:profile {docID:'"+docID+"'}) return sign(COUNT(r)) AS c");
+	org.neo4j.driver.v1.StatementResult result = dbsession.run("MATCH (u:user {userID:'"+userID+"'})-[r:favors]->(p:profile {docID:'"+docID+"'}) return sign(COUNT(r)) AS c");
 		
 		while(result.hasNext())
 		{
@@ -52,17 +58,16 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 			}
 			
 		}
-		dbsession.close();
-		driver.close();
-		//log.warn("return wert ist"+returnwert);
-		
-		return returnwert;
+	dbsession.close();
+	driver.close();
+	log.debug("The favorite already exists?: "+returnwert);
+	return returnwert;
 	}
 	
 	
 	public List<String> listFavorites(int userID)
 	{
-	log.debug("List all Favorites");	
+	log.debug("List all Favorites of user "+userID);	
 		
 		List<String> returnlist = new ArrayList<String>();	
 		
@@ -124,9 +129,10 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 		
 	dbsession.close();
 	driver.close();
+	log.debug("Set loggedInTime "+dateTimeString+" for "+username);
 	}
 	
-	
+	/*
 	public long getSessionTime(String username)
 	{
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -138,20 +144,21 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 	LocalDateTime logoutDate = LocalDateTime.parse(logout, formatter);
 	
 	long diffinSeconds = Duration.between(loginDate, logoutDate).getSeconds();
-	
+	log.debug("Return sessionTime "+diffinSeconds+" for "+username);
 	return diffinSeconds;
 	}
+	*/
 	
-	public long getTimeSinceLastSession(String username)
+	public long getTimeSinceLastLogin(String username)
 	{
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		
 	LocalDateTime nowTime = LocalDateTime.now();
-	String logout =getLogoutTime(username);
-	LocalDateTime logoutDate = LocalDateTime.parse(logout, formatter);
+	String login =getLoginTime(username);
+	LocalDateTime loginDate = LocalDateTime.parse(login, formatter);
 	
-	long diffinSeconds = Duration.between(logoutDate, nowTime).getSeconds();
-	
+	long diffinSeconds = Duration.between(loginDate, nowTime).getSeconds();
+	log.debug("Return TimeSinceLastLogin "+diffinSeconds+" for "+username);
 	return diffinSeconds;
 	}
 	
@@ -174,7 +181,7 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 		
 		dbsession.close();
 		driver.close();
-		log.debug("Return logginTime "+logginTime);
+		log.debug("Return logginTime "+logginTime+" for "+username);
 		return logginTime;	
 		
 	}
@@ -197,7 +204,7 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 		
 		dbsession.close();
 		driver.close();
-		log.debug("Return loggoutTime "+loggoutTime);
+		log.debug("Return loggoutTime "+loggoutTime+" for "+username);
 		return loggoutTime;	
 		
 	}
@@ -238,6 +245,7 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 		
 	dbsession.close();
 	driver.close();		
+	log.debug("Set loggedOutTime "+dateTimeString+" for "+userID);
 	}
 	
 	public void createUserNode(int userID,String username)
@@ -352,7 +360,7 @@ static Logger log = Logger.getLogger(Neo4jHelper.class);
 		
 		dbsession.close();
 		driver.close();
-		log.debug("Return visibility [int docID] "+visibility);
+		log.debug("Return visibility "+visibility+" for "+docID);
 		return visibility;
 	}
 	

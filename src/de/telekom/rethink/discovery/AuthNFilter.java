@@ -1,3 +1,9 @@
+/********************************************************************************************************************
+ * Deutsche Telekom Laboratories																					*
+ * Copyright (c) 2016 European Project reTHINK																		*
+ * 																													*
+ ********************************************************************************************************************/
+
 package de.telekom.rethink.discovery;
 
 import java.io.IOException;
@@ -10,6 +16,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+//import de.telekom.rethink.discovery.listener.*;
 
 
 
@@ -27,6 +34,7 @@ private String contextPath;
      */
     public AuthNFilter() {
         // TODO Auto-generated constructor stub
+    	System.out.print("reTHINK AuthenticationFilter intialized");
     }
 
 	/**
@@ -44,6 +52,9 @@ private String contextPath;
 		// place your code here
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
+		
+		//SessionListener sl=new SessionListener();
+		//sl.sessionAccessed(req.getRequestedSessionId());
 		
 		if(req.getSession().getAttribute("userID")!=null){
 			// pass the request along the filter chain
