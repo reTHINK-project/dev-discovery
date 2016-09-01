@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
-  
   <display-name>de.telekom.rethink.discovery</display-name>
-  
   <welcome-file-list>
     <welcome-file>searchPage.jsp</welcome-file>
   </welcome-file-list>
@@ -29,23 +27,30 @@
     <url-pattern>/stats.jsp</url-pattern>
     <url-pattern>/user.jsp</url-pattern>
     <url-pattern>/deleteUser.jsp</url-pattern>
-     <url-pattern>/session.jsp</url-pattern>
+    <url-pattern>/session.jsp</url-pattern>
+    <url-pattern>/access.jsp</url-pattern>
   </filter-mapping>
+  
   
   <error-page>
     <error-code>404</error-code>
     <location>/errorPage404.html</location>
   </error-page>
   
+  
   <context-param>
     <param-name>instanceID</param-name>
     <param-value>telekom1</param-value>
   </context-param>
   
+  
   <context-param>
     <param-name>solrIndexURL</param-name>
     <param-value>http://localhost:8983/solr/rethink</param-value>
   </context-param>
+  
+  
+  
   
   <context-param>
     <param-name>neo4jURL</param-name>
@@ -59,8 +64,6 @@
     <param-name>neo4jDBstring</param-name>
     <param-value>rethink</param-value>
   </context-param>
-  
-  
   <context-param>
     <param-name>MariaDBDriver</param-name>
     <param-value>org.mariadb.jdbc.Driver</param-value>
@@ -77,15 +80,10 @@
     <param-name>MariaDBstring</param-name>
     <param-value>rethink</param-value>
   </context-param>
-  
-  
-  
   <context-param>
     <param-name>GlobalRegistryEndpoint</param-name>
     <param-value>http://130.149.22.133:5002/guid</param-value>
   </context-param>
-  
-  
   <servlet>
     <servlet-name>Jersey REST Service</servlet-name>
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -99,22 +97,17 @@
     <servlet-name>Jersey REST Service</servlet-name>
     <url-pattern>/rest/*</url-pattern>
   </servlet-mapping>
-  
-<!--  initializing logging with log4j start -->
   <servlet>
     <servlet-name>Log4jInitServlet</servlet-name>
     <servlet-class>de.telekom.rethink.discovery.Log4jInitServlet</servlet-class>
     <init-param>
       <param-name>log4j-properties-location</param-name>
-      <param-value>WEB-INF/log4j.properties</param-value>
+      <param-value>/WEB-INF/log4j.properties</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-  
- <!-- initializing session observation with session listener -->
-  
   <listener>
-  	<description>sessionListener</description>
-  	<listener-class> de.telekom.rethink.discovery.listener.SessionListener</listener-class>
+    <description>sessionListener</description>
+    <listener-class> de.telekom.rethink.discovery.listener.SessionListener</listener-class>
   </listener>
 </web-app>

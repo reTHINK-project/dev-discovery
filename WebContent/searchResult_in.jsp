@@ -67,7 +67,7 @@ for(Enumeration<Hashtable<String,String>> el=resultVector.elements();el.hasMoreE
 if(helper.cleanUpString(singleResult.get("hasrethinkID").toString()).equals("true"))
 {
 %>
-	 <td width="100"><a href="connectGlobalRegistry.jsp?guid=<%out.print(helper.cleanUpString(singleResult.get("rethinkID").toString()));%>" target="_parent"><div class="rebutton">RETHINK</div></a></td>
+	 <td width="100"><a href="connectGlobalRegistry.jsp?guid=<%out.print(helper.cleanUpString(singleResult.get("rethinkID").toString()));%>&headline=<%out.print(helper.cleanUpString(singleResult.get("headline").toString())); %>" target="_parent"><div class="rebutton">RETHINK</div></a></td>
 <%
 }
 	; %>  

@@ -7,7 +7,9 @@
 package de.telekom.rethink.discovery;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import org.apache.log4j.Logger;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,7 +17,7 @@ import org.json.simple.parser.ParseException;
 
 public class JSONHelper {
 	
-	
+	static Logger log = Logger.getLogger(JSONHelper.class);			
 	
 	
 	public String getTokenPart(String request, String field)
@@ -44,8 +46,9 @@ public class JSONHelper {
 		*/
       }catch(ParseException pe){
   		
-          System.out.println("position: " + pe.getPosition());
-          System.out.println(pe);
+    	  log.info("Parsing Error"+pe);
+    	  log.info("at postion"+pe.getPosition());
+         
        }	
 	
 	
@@ -57,18 +60,28 @@ public class JSONHelper {
 	public String decodeJWToken(String token) throws UnsupportedEncodingException
 	{
 	String returndata=null;	
-	
+	log.debug("Start to decode token.");
 		
 	String[] jwtParts = token.split("\\.");
+	log.debug("Split tokens");
+	log.debug("part 0:"+jwtParts[0]);
+	log.debug("part 1:"+jwtParts[1]);
+	log.debug("part 2:"+jwtParts[2]);
+	
+	
 	//byte[] bytes = "Hello, World!".getBytes("UTF-8");
 	//String encoded = Base64.getEncoder().encodeToString(bytes);
 	//returns just the data field of the token
-	byte[] decoded = Base64.getDecoder().decode(jwtParts[1]);
+	byte[] decoded = Base64.getUrlDecoder().decode(jwtParts[1].trim());
+	log.debug("decode Base64");
 	String data=new String(decoded);
+	log.debug("The clear datapart is:"+data);
 	//data are a token in itself so return the data field of it
 	String data2 = getTokenPart(data,"data");
+	log.debug("The data part of it is:"+data2);
 	//data are base64 encoded
-	byte[] cleardata = Base64.getDecoder().decode(data2);
+	byte[] cleardata = Base64.getUrlDecoder().decode(data2);
+	log.debug("decode Base64 again");
 	
 	returndata = new String(cleardata);
 				
