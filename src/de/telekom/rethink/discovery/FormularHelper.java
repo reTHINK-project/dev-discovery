@@ -9,6 +9,9 @@ package de.telekom.rethink.discovery;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonObject;
+
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -19,6 +22,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.ws.rs.core.Response;
 
 public class FormularHelper {
 
@@ -31,6 +35,7 @@ Neo4jHelper neoHelper;
 DBHelper dbHelper;
 RESTClient restClient;
 JSONHelper jsonHelper;
+GlobalAndDomainRegistryConnector grConnector;
 
 static Logger log = Logger.getLogger(FormularHelper.class);	
 
@@ -41,9 +46,30 @@ static Logger log = Logger.getLogger(FormularHelper.class);
 			solrHelper = new SolrIndexHelper(request,this);	
 			neoHelper = new Neo4jHelper(request,this);
 			dbHelper = new DBHelper(request,this);
+			grConnector = new GlobalAndDomainRegistryConnector(request, this);
+			
 			restClient = new RESTClient();
 			jsonHelper = new JSONHelper();
 		}
+		
+		
+		public String getDataPartOfJSONObject(String token,String keyword)
+		{
+		return jsonHelper.getDataPartOfJSONObject(token,keyword);
+		}
+		
+		/*
+		public void getUserIDsFromGlobalRegistry(String clearpayload)
+		{
+		jsonHelper.getUserIDsFromGlobalRegistry(clearpayload);	
+		}
+		*/
+		
+		public String getRawAnswerOfGlobalRegistry(String guid)
+		{
+		return 	grConnector.getRawAnswerOfGlobalRegistry(guid);
+		}
+		
 		
 		public String callURL(String URL, String path)
 		{
@@ -212,12 +238,8 @@ static Logger log = Logger.getLogger(FormularHelper.class);
 		}
 		
 		
-		public String getTokenPart(String request, String field)
-		{
-		return jsonHelper.getTokenPart(request, field);
-		}
 		
-		public String decodeJWToken(String token) throws UnsupportedEncodingException
+		public String decodeJWToken(String token) throws IOException
 		{
 		return jsonHelper.decodeJWToken(token);
 		}

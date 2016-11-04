@@ -35,11 +35,41 @@ static Logger log = Logger.getLogger(RESTClient.class);
 		String answer = response.readEntity(String.class);
 		returnString=answer;
 		
+		
 		log.info("get headers: "+ response.getHeaders().toString());
 		log.info("get content: "+ answer);
 		
 		return returnString;	
 	}
+	
+	/*
+	public Response callURL(String URL, String path)
+	{
+		Response response;
+		
+		log.info("contacts: "+URL);  
+		
+		Client client = ClientBuilder.newClient();
+		WebTarget webTarget= client.target(URL).path(path);
+		
+		Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+		response = invocationBuilder.get();
+		
+		String answer = response.readEntity(String.class);
+		
+
+		log.info("Status:"+response.getStatus());
+		log.info("StatusInfo:"+response.getStatusInfo());
+			
+		
+		log.info("get headers: "+ response.getHeaders().toString());
+		log.info("get content: "+ answer);
+		
+		return response;	
+	}
+	*/
+	
+	
 	
 	
 	public String callURL(String URL, String path)
@@ -56,6 +86,11 @@ static Logger log = Logger.getLogger(RESTClient.class);
 		
 		String answer = response.readEntity(String.class);
 		returnString=answer;
+		
+
+		log.info("Status:"+response.getStatus());
+		log.info("Status:"+response.getStatusInfo());
+			
 		
 		log.info("get headers: "+ response.getHeaders().toString());
 		log.info("get content: "+ answer);
@@ -79,6 +114,7 @@ static Logger log = Logger.getLogger(RESTClient.class);
 		
 		String answer = response.readEntity(String.class);
 		returnString=answer;
+		
 		
 		log.info("get headers: "+ response.getHeaders().toString());
 		log.info("get content: "+ answer);

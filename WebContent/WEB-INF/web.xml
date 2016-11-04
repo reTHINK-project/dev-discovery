@@ -64,6 +64,7 @@
     <param-name>neo4jDBstring</param-name>
     <param-value>rethink</param-value>
   </context-param>
+  
   <context-param>
     <param-name>MariaDBDriver</param-name>
     <param-value>org.mariadb.jdbc.Driver</param-value>
@@ -80,10 +81,14 @@
     <param-name>MariaDBstring</param-name>
     <param-value>rethink</param-value>
   </context-param>
+  
+  
   <context-param>
     <param-name>GlobalRegistryEndpoint</param-name>
     <param-value>http://130.149.22.133:5002/guid</param-value>
   </context-param>
+  
+ 
   <servlet>
     <servlet-name>Jersey REST Service</servlet-name>
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -97,6 +102,9 @@
     <servlet-name>Jersey REST Service</servlet-name>
     <url-pattern>/rest/*</url-pattern>
   </servlet-mapping>
+  
+  
+  
   <servlet>
     <servlet-name>Log4jInitServlet</servlet-name>
     <servlet-class>de.telekom.rethink.discovery.Log4jInitServlet</servlet-class>

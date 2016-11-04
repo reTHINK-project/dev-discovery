@@ -306,6 +306,22 @@ a {
 	min-width: 520px;
 	z-index: 1;
 }
+.grebutton {
+	position: relative;
+	top: 0px;
+	left: 0px;	
+	width: 90px;
+	height: 25px;
+	z-index: 1;
+	display: block;		
+	text-align: center;
+	padding-top: 8px;
+	
+	background-color: #C5C5C5;
+	color: #E6E6E6;	
+	font-weight: 900;
+	font-size: 14px;		
+}
 .rebutton {
 	position: relative;
 	top: 0px;
@@ -375,8 +391,15 @@ a {
 }
 .spacer_3 {
 	height: 5px;
+	background-color: #FFF;
 }
-
+.spacer_4 {
+	height: 40px;
+	background:url('../images/trenner_b.png');
+}
+.spacer_5 {
+	height: 50px;
+}
 /* ------------------- PROFILES ------------------- */
 #container_profile {
 	position: absolute;
@@ -571,8 +594,4 @@ a {
 	font-size: 20px;
 	font-weight: 400;
 	color: #009DDE;	
-}
-.spacer_4 {
-	height: 40px;
-	background:url('../images/trenner_b.png');
 }

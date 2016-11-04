@@ -11,6 +11,8 @@
 
 <link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+
 <style type="text/css">
 body {
 	background-image: url(images/back_01.png);
