@@ -7,11 +7,7 @@
 package de.telekom.rethink.discovery;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;

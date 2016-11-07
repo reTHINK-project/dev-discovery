@@ -9,9 +9,6 @@ package de.telekom.rethink.discovery;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 
-import com.eclipsesource.json.Json;
-import com.eclipsesource.json.JsonObject;
-
 import org.apache.log4j.Logger;
 
 import java.io.IOException;

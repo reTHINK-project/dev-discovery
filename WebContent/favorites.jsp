@@ -1,5 +1,5 @@
-
 <%@ page import="de.telekom.rethink.discovery.FormularHelper"
+		 import="de.telekom.rethink.discovery.GlobalAndDomainRegistryConnector"
          import="java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -7,11 +7,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<%
+FormularHelper helper =new FormularHelper(request);
+GlobalAndDomainRegistryConnector gdrc = new GlobalAndDomainRegistryConnector(request,helper);
 
+int userID = (int) session.getAttribute("userID");
+List<String> favorites=helper.listFavorites(userID);
+int zIndex=favorites.size();
+%>
 <title>R E T H I N K</title>
 
 <link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="css/style.css"/>
+<link rel="stylesheet" type="text/css" href="css/results.css"/>
+<script src="script/jquery.min.js" type="text/javascript"></script>
 <style type="text/css">
 body {
 	background-image: url(images/back_01.png);
@@ -25,6 +34,19 @@ body {
 	min-width: 520px;
 	z-index: 1;
 }
+<% for (int j=1;j<=zIndex;j++)
+	{
+%>
+#result_0<%out.print(j);%>{
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	z-index: <%out.print(zIndex-j);%>;
+	}
+	<%
+	}
+	%>	
 </style>
 </head>
 <body>
@@ -40,46 +62,108 @@ body {
 <div id="container_res">
 <div class="spacer_1"></div>
 <%
-
-FormularHelper helper =new FormularHelper(request);
-
-int userID = (int) session.getAttribute("userID");
-
-List<String> favorites=helper.listFavorites(userID);
 Iterator<String> it= favorites.iterator();
+int i=0;
 while(it.hasNext())
 {
 	String profile=it.next();	
-	//out.println("Profile "+ profile);
 	Hashtable<String,String> hashtab= helper.getProfileFromSolr(profile);
-	//out.println(hashtab.get("headline"));
+	String GUID = helper.cleanUpString(hashtab.get("rethinkID").toString());
+    String hasGUID = helper.cleanUpString(hashtab.get("hasrethinkID").toString()) ;
+    String rawAnswerGR = gdrc.getRawAnswerOfGlobalRegistry(helper.cleanUpString(hashtab.get("rethinkID").toString()));
+    boolean GUIDexist = gdrc.GUIDexists(rawAnswerGR);
+    List currentHyperties = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR);
+	i++;
 %>
-
 <!--_____________________________FAVORITE 01_____________________________-->
-<div id="result_01">
+<div id="result_0<% out.print(i);%>">
+
+<%
+if(hasGUID.equals("true"))
+{	
+	if(GUIDexist)
+		{ 	
+		if(currentHyperties.size()>0)
+			{
+			Iterator entries=currentHyperties.iterator();
+			%>
+			<div id="repop_0<%out.print(i);%>" class="repop">
+			<%
+			while(entries.hasNext())
+				{
+				String line = (String) entries.next();
+				
+				String[] part = line.split("#");
+				%>
+				<a href="<%out.print(part[0]);%>"><div class="<%out.print(part[1]);%>"><span class="rp_text1"><%out.print(part[2]);%></span><span class="rp_text2a"><%out.print(part[3]);%></span></div></a>
+				<%
+				}
+			%>
+			<div class="spacer_3"></div>
+			</div>
+			<%
+			}	
+		}
+}				
+%>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-   <!-- <td width="100"><a href="#" target="_parent"><div class="rebutton">RETHINK</div></a></td> --> 
+  <tr>  
 <% 
 //4. 	check if rethinkID is available
-if(helper.cleanUpString(hashtab.get("hasrethinkID").toString()).equals("true"))
+if(hasGUID.equals("true"))
 {
+	if(GUIDexist && currentHyperties.size()>0)
+	{
 	%>
-	 <td width="100"><a href="connectGlobalRegistry.jsp?guid=<%out.print(helper.cleanUpString(hashtab.get("rethinkID").toString()));%>" target="_parent"><div class="rebutton">RETHINK</div></a></td>
+	 <td width="100"><a href="connectGlobalRegistry.jsp?guid=<%out.print(helper.cleanUpString(hashtab.get("rethinkID").toString()));%>" target="_parent"><div class="rebutton" id="reb_0<%out.print(i);%>">RETHINK</div></a></td>
 	<%
+	}
+	else
+	{
+	%>
+	<td width="100"><div class="grebutton" id="reb_0<%out.print(i);%>">RETHINK</div></td>
+	<%
+	}
 }
-	; %> 
-    
+	 %>    
     <td class="rehead"><% out.println(helper.cleanUpString(hashtab.get("headline"))); %></td>
     <td width="50"><a href="deleteFavoriteResult.jsp?profile=<% out.print(helper.cleanUpString(hashtab.get("docID"))); %>" target="_parent" ><img src="images/delete_01.png" width="33" height="33" class="delete" /></a></td>
   </tr>
 </table>
+
+<%
+if(hasGUID.equals("true"))
+{
+	if(GUIDexist)
+	{
+		if(currentHyperties.size()>0)
+		{
+%>
+<script type="text/javascript">
+$( "#reb_0<%out.print(i);%>" ).on( "mouseenter", function() {
+	$( repop_0<%out.print(i);%>).css( "display", "block" );		
+});
+$( "#reb_0<%out.print(i);%>" ).on( "mouseleave", function() {
+	$( repop_0<%out.print(i);%>).css( "display", "none" );			
+}); 
+$( "#repop_0<%out.print(i);%>" ).on( "mouseenter", function() {
+	$( repop_0<%out.print(i);%>).css( "display", "block" );	
+});
+$( "#repop_0<%out.print(i);%>" ).on( "mouseleave", function() {
+	$( repop_0<%out.print(i);%>).css( "display", "none" );				
+}); 
+</script>
+<%
+		}
+	}
+}
+%>
+
 <div class="spacer_2"></div>
 <div class="retext">
 <% out.println(helper.cleanUpString(hashtab.get("description"))); %>
 </div>
 <div  class="spacer_2"></div>
-
 <%
 String contacts = helper.cleanUpString(hashtab.get("contacts").toString());
 	
@@ -95,9 +179,7 @@ String contacts = helper.cleanUpString(hashtab.get("contacts").toString());
 		}
 	}
 %>
-
 </div>
-
 <div class="spacer_1"></div>
 <%
 

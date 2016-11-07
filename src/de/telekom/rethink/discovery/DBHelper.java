@@ -47,6 +47,12 @@ FormularHelper formularHelper;
 	}
 	
 	
+	public void log(String message)
+	{
+	log.info(message);	
+		
+	}
+	
 	public List<Integer> getProfileNumbers(int userID) throws ClassNotFoundException, SQLException
 	{
 		List<Integer> list =new ArrayList<Integer>();	

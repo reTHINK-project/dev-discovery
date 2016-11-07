@@ -7,7 +7,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<%
+FormularHelper helper =new FormularHelper(request);
+GlobalAndDomainRegistryConnector gdrc = new GlobalAndDomainRegistryConnector(request,helper);
 
+//1. 	get request parameter
+String inputText = request.getParameter("searchtext");
+
+//2. 	get result vector
+Vector<Hashtable<String,String>> resultVector=helper.doPolicyEnabledSearch(inputText,0);
+int zIndex=resultVector.size();
+%>
 <title>R E T H I N K</title>
 
 <link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
@@ -15,11 +25,23 @@
 <link rel="stylesheet" type="text/css" href="css/results.css"/>
 <script src="script/jquery.min.js" type="text/javascript"></script>
 <style type="text/css">
+<% for (int j=1;j<=zIndex;j++)
+	{
+%>
+#result_0<%out.print(j);%>{
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	z-index: <%out.print(zIndex-j);%>;
+	}
+	<%
+	}
+	%>
 </style>
 </head>
 <body>
 <div id="mainframe">
-
 
 <!--_____________________________LOGIN_____________________________-->
 <a href="login.jsp" target="_parent"><div id="login">LOGIN</div></a>
@@ -35,18 +57,6 @@
 </table>
 </form>
 </div>
-
-<%
-FormularHelper helper =new FormularHelper(request);
-GlobalAndDomainRegistryConnector gdrc = new GlobalAndDomainRegistryConnector(request,helper);
-//1. 	get request parameter
-String inputText = request.getParameter("searchtext");
-
-
-//2. 	get result vector
-Vector<Hashtable<String,String>> resultVector=helper.doPolicyEnabledSearch(inputText,0);
-%>
-
 <!--_____________________________RESULTS_____________________________-->
 <div id="container_res">
 <div class="spacer_1"></div>
@@ -55,10 +65,8 @@ Vector<Hashtable<String,String>> resultVector=helper.doPolicyEnabledSearch(input
 int i=0;
 
 for(Enumeration<Hashtable<String,String>> el=resultVector.elements();el.hasMoreElements();)
-{
-	 
-    Hashtable singleResult = (Hashtable) el.nextElement();		
-   
+{ 
+	Hashtable singleResult = (Hashtable) el.nextElement();		
     String GUID = helper.cleanUpString(singleResult.get("rethinkID").toString());
     String hasGUID = helper.cleanUpString(singleResult.get("hasrethinkID").toString()) ;
     String rawAnswerGR = gdrc.getRawAnswerOfGlobalRegistry(helper.cleanUpString(singleResult.get("rethinkID").toString()));
@@ -66,10 +74,10 @@ for(Enumeration<Hashtable<String,String>> el=resultVector.elements();el.hasMoreE
     List currentHyperties = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR);
     i++;
 %>
-<!--_____________________________RESULT 0<% out.print(i);%>_____________________________-->
-<div id="result_0<%out.print(i);%>">
+<!--_____________________________RESULT 0<%out.print(i);%>_____________________________-->
 
-<div id="repop_0<%out.print(i);%>">
+<div id="result_0<%out.print(i);%>" >
+
 <%
 if(hasGUID.equals("true"))
 {	
@@ -78,7 +86,9 @@ if(hasGUID.equals("true"))
 		if(currentHyperties.size()>0)
 			{
 			Iterator entries=currentHyperties.iterator();
-			
+			%>
+			<div id="repop_0<%out.print(i);%>" class="repop">
+			<%
 			while(entries.hasNext())
 				{
 				String line = (String) entries.next();
@@ -88,12 +98,14 @@ if(hasGUID.equals("true"))
 				<a href="<%out.print(part[0]);%>"><div class="<%out.print(part[1]);%>"><span class="rp_text1"><%out.print(part[2]);%></span><span class="rp_text2a"><%out.print(part[3]);%></span></div></a>
 				<%
 				}
+			%>
+			<div class="spacer_3"></div>
+			</div>
+			<%
 			}	
 		}
 }				
 %>
-<div class="spacer_3"></div>
-</div>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
    <tr> 
 <% 
@@ -103,7 +115,7 @@ if(hasGUID.equals("true"))
 	if(GUIDexist && currentHyperties.size()>0)
 		{
 		%>	
-		<td width="100"><a href="connectGlobalRegistry.jsp?guid=<%out.print(helper.cleanUpString(singleResult.get("rethinkID").toString()));%>&headline=<%out.print(helper.cleanUpString(singleResult.get("headline").toString())); %>" target="_parent"><div class="rebutton" id="reb_0<%out.print(i);%>">RETHINK</div></a></td>
+		<td width="100"><a href="connectGlobalRegistry.jsp?guid=<%out.print(GUID);%>&headline=<%out.print(helper.cleanUpString(singleResult.get("headline").toString())); %>" target="_parent"><div class="rebutton" id="reb_0<%out.print(i);%>">RETHINK</div></a></td>
 		<%
 		}
 	else
@@ -165,6 +177,7 @@ $( "#repop_0<%out.print(i);%>" ).on( "mouseleave", function() {
 	}
 
 %>
+</div>
 <div class="spacer_1"></div>
 <%
 //close enumeration
