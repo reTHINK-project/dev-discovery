@@ -1,6 +1,7 @@
 <%@ page 	import="de.telekom.rethink.discovery.FormularHelper"
 			import="de.telekom.rethink.discovery.GlobalAndDomainRegistryConnector"
 		 	import="org.apache.log4j.Logger"
+		 	import="com.eclipsesource.json.*"
 		 	import="java.util.*"%>
 		
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -16,37 +17,82 @@
 <div align="center">
 <%
 Logger log = Logger.getLogger(this.getClass());		
-
 String guid = request.getParameter("guid");
 String headline = request.getParameter("headline");
 String rawAnswerGR ="";
+String clearAnswerGR="";
 
 FormularHelper helper =new FormularHelper(request);
 GlobalAndDomainRegistryConnector gdrc = new GlobalAndDomainRegistryConnector(request,helper);
 
 //grc.getDomainEntries(guid);
-out.println("<h1>reTHINK contacts of "+headline+"</h1><br><br>");
-out.println("<h3>Lookup registries for GUID: "+guid+"</h3><br><br><br>");
+out.println("<h1>reTHINK discovery and resolving process for : "+headline+"</h1><br><br>");
 
-try{
-	rawAnswerGR = gdrc.getRawAnswerOfGlobalRegistry(guid);
-	String clearAnswerGR= gdrc.getClearAnswerOfGlobalRegistry(rawAnswerGR);
-	out.println("<br><h3>The clear answer of GlobalRegistry is:</h3><br>"+clearAnswerGR+"<br><br>");
+%>
+<table style="width:100%">
+	<tr>
+		<td><b>GUID</b></td>		
+		<td><%out.println(guid);%></td>
+	</tr>
+	<tr>
+		<td><b>raw answer of gReg</b></td>
+		
+		<%
+		try{
+			rawAnswerGR = gdrc.getRawAnswerOfGlobalRegistry(guid);
+			out.println("<td>"+rawAnswerGR+"</td>");
+						
+		}catch(Exception ex)
+		{
+			out.println("<br>Network error!"+ex);
+		}
 	
-}catch(Exception ex)
-{
-	out.println("<br>Network error!"+ex);
-}
+		%>
+	</tr>
+	<tr>	
+		<td><b>clear answer of gReg</b></td>
+		<%
+		clearAnswerGR= gdrc.getClearAnswerOfGlobalRegistry(rawAnswerGR);
+		out.println("<td>"+clearAnswerGR+"</td>");
+		%>	
+	</tr>
+	
+		<%
+		JsonObject object = Json.parse(clearAnswerGR).asObject();
+		JsonArray arrayOfuserIds = object.get("userIDs").asArray();
+		
+		for(int i=0;i<arrayOfuserIds.size();i++)
+			{
+			JsonObject SingleUserID = arrayOfuserIds.get(i).asObject();
+			String domain = SingleUserID.getString("domain", "empty domain");
+			String domainRegAddress = gdrc.getServerAddressOfDomainRegistry(domain);
+			String uID = SingleUserID.getString("uID", "empty uID");
+			%>
+			<tr>
+				<td><b>Contacted Domain</b></td>
+				<td><% out.println(domain);%></td>
+			</tr>
+			<tr>
+				<td><b>Domain address</b></td>
+				<td><% out.println(domainRegAddress);%></td>
+			</tr>
+			<tr>
+				<td><b>Requested userID</b></td>
+				<td><% out.println(uID);%></td>
+			</tr>
+			<%
+			}
+			
 
 if(gdrc.GUIDexists(rawAnswerGR))
 	{
 	List currentHyperties = gdrc.getCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR);
 	
 	if(currentHyperties.size()==0)
-		out.println("GUID is valid but there are no currently running hyperties.");
+		out.println("GUID is valid but there are no currently running hyperties.<br>");
 	else
 	{
-	out.println("<h3>Found following available Hyperties at DomainRegistry:</h3><br>");
+
 	Iterator entries=currentHyperties.iterator();
 	
 	while(entries.hasNext())
@@ -55,8 +101,12 @@ if(gdrc.GUIDexists(rawAnswerGR))
 		
 		String[] part = line.split("#");
 		
-		out.println(part[0]+"<br");
-	
+		%>
+		<tr>
+			<td><b>current hyperty URL</b></td>
+			<td><% out.println(part[0]);%></td>
+		</tr>
+		<%
 		}
 	}	}
 
@@ -64,6 +114,7 @@ else
 	out.println("<br>Value: no valid GUID");
 
    %>
+</table>
 </div>
 </body>
 </html>
