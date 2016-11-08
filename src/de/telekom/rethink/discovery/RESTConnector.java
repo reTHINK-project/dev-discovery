@@ -16,19 +16,26 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.QueryParam;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 	
-import org.json.simple.JSONObject;
+//import org.json.simple.JSONObject;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 	//import org.json.simple.JSONArray;
 	//import org.json.simple.parser.ParseException;
 	//import org.json.simple.parser.JSONParser;
 	
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+
 
 import de.telekom.rethink.discovery.FormularHelper;
+import de.telekom.rethink.discovery.GlobalAndDomainRegistryConnector;
 
 
 
@@ -45,11 +52,15 @@ import de.telekom.rethink.discovery.FormularHelper;
 	@Path("/discover")
 	public class RESTConnector {
 		
-	static Logger log = Logger.getLogger(RESTConnector.class);		
 		
+
 		
+	
+	static Logger log = Logger.getLogger(RESTConnector.class);
+	
 	@Context 
 	private HttpServletRequest request; 	
+		
 	
 						
 	 	// This method is called if HTML is request
@@ -60,16 +71,18 @@ import de.telekom.rethink.discovery.FormularHelper;
 	   
 	  		log.info("REST_API was pinged.");   
 	  		log.info(request.getSession().getServletContext().getInitParameter("instanceID"));
-		
-	  		JSONObject obj = new JSONObject();
-	  		obj.put("build-date", "2016-07-18");
-	  		obj.put("version", 0.1);
-	  		obj.put("message","reTHINK discovery service");
-	  		obj.put("instanceID", request.getSession().getServletContext().getInitParameter("instanceID"));
-	  		obj.put("responseCode",200);
-	  		obj.put("errorCode",0);
-	  			  		
-	  		return Response.ok(obj.toString(), MediaType.APPLICATION_JSON).build();
+	  		
+	  		JsonObject pingAnswer = new JsonObject();
+	  		pingAnswer.add("build-date", "2016-11-08");
+	  		pingAnswer.add("version", "0.2");
+	  		pingAnswer.add("service", "reTHINK discovery");
+	  		pingAnswer.add("message", "ping");
+	  		pingAnswer.add("instanceID", request.getSession().getServletContext().getInitParameter("instanceID"));
+	  		pingAnswer.add("responseCode", 200);
+	  		pingAnswer.add("errorCodeCode", 0);
+	  		
+	  		return Response.ok(pingAnswer.toString(), MediaType.APPLICATION_JSON).build();
+
 	  	}	
 	
 	
@@ -91,12 +104,93 @@ import de.telekom.rethink.discovery.FormularHelper;
 		  		}	  
 		  	else
 		  		{
-		  		FormularHelper helper= new FormularHelper(this.request);	  
-		  		String JSONString= helper.doJSONSearch(searchquery, 0);		  		
+		  		FormularHelper helper= new FormularHelper(this.request);	
+		  		GlobalAndDomainRegistryConnector gdrc=new GlobalAndDomainRegistryConnector(request,helper);
+		  		String JSONString= helper.doJSONSearch(searchquery, 0);		  	
 		  		
-		  		response= Response.status(201).entity(JSONString).type(MediaType.APPLICATION_JSON).build();
+		  		JsonObject jsonObject = Json.parse(JSONString).asObject();
+		  		JsonArray allSearchResults = jsonObject.get("results").asArray();
+		  		String searchString = jsonObject.get("searchString").asString();
+		  		int responseCode = (Integer) jsonObject.get("responseCode").asInt();
+		  		String queryInstanceID =   jsonObject.get("instanceID").asString();
 		  		
-		  		log.info("Provide: "+JSONString.toString());
+		  		JsonObject returnObject = new JsonObject();
+		  		returnObject.add("instanceID", queryInstanceID);
+		  		returnObject.add("responseCode", responseCode);
+		  		returnObject.add("searchString", searchString);
+		  		
+		  		JsonArray results = new JsonArray();
+		  		
+		  		for(int i=0;i<allSearchResults.size();i++)
+		  			{
+		  			JsonObject singleResult=(JsonObject) allSearchResults.get(i);
+		  			
+		  			String hasrethinkID = (String) singleResult.get("hasrethinkID").asString();
+		  			String instanceID = (String) singleResult.get("instanceID").asString();
+		  			String hashtags = (String) singleResult.get("hashtags").asString();
+		  			String description = (String) singleResult.get("description").asString();
+		  			String rethinkID = (String) singleResult.get("rethinkID").asString();
+		  			String headline = (String) singleResult.get("headline").asString();
+		  			String contacts = (String) singleResult.get("contacts").asString();
+		  			int resultNo = (Integer) singleResult.get("resultNo").asInt();
+		 
+		  			JsonObject singleReturnResult = new JsonObject();
+		  			singleReturnResult.add("resultNo", resultNo);
+		  			singleReturnResult.add("instanceID", instanceID);
+		  			singleReturnResult.add("hashtags", hashtags);
+		  			singleReturnResult.add("description", description);
+		  			singleReturnResult.add("rethinkID", rethinkID);
+		  			singleReturnResult.add("headline", headline);
+		  			singleReturnResult.add("contacts", contacts);
+		  			singleReturnResult.add("hasrethinkID", hasrethinkID);
+		  			
+		  			
+		  			if(hasrethinkID.equals("true"))
+		  						{
+		  						
+		  						String guid = (String) singleResult.get("rethinkID").asString();
+		  						
+		  						String rawAnswer = gdrc.getRawAnswerOfGlobalRegistry(guid);
+		  						
+		  						if(gdrc.GUIDexists(rawAnswer))
+		  							{			
+		  							List hypertylist = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswer);
+		  						
+		  							Iterator iterator = hypertylist.iterator();
+		  						
+		  							JsonArray hypertyArray = new JsonArray();
+		  						
+		  							while(iterator.hasNext())
+		  								{
+			  							String resultline=	(String) iterator.next();
+			  							String[] part = resultline.split("#");
+			  							JsonObject hyperty =new JsonObject();
+			  							String combinedURL=part[0];
+			  							String[] splitURL = combinedURL.split("\\?");
+			  							String hypertyURLplusID = splitURL[1];
+			  							String[] hypertyURLplusIDField = hypertyURLplusID.split("&");
+			  							String URL =  hypertyURLplusIDField[0];
+			  							String uID =  hypertyURLplusIDField[1];
+		
+			  							hyperty.add("url",URL);
+			  							hyperty.add("userID", uID);
+			  							hyperty.add("media", part[2]);
+			  							hyperty.add("provider", part[3]);
+			  							hypertyArray.add(hyperty);  							
+		  								}
+		  							singleReturnResult.add("hyperties", hypertyArray);
+		  							}
+		  						}
+		  			
+		  				results.add(singleReturnResult);	
+		  			}
+		  		returnObject.add("results", results);
+		  		
+		  		//response= Response.status(201).entity(JSONString).type(MediaType.APPLICATION_JSON).build();
+		  		response= Response.status(201).entity(returnObject.toString()).type(MediaType.APPLICATION_JSON).build();
+		  		
+		  		
+		  		log.info("Provide: "+returnObject.toString());
 		  		log.info("Requestor Address:"+request.getRemoteAddr()+"/"+request.getPathInfo());
 		  	}
 		    return response;

@@ -35,8 +35,9 @@ They have a headline and some text for description. They might have hashtags des
 Profiles can also contain communication endpoints like e-mail address, phone number, websites, facebook- or linkedin profile URLS.
 
 As an additional button within the profile there is a “reTHINK” button. If this kind of button is in the profile this means the owner of this profile has a “reTHINK”-ID (a.k.a GUID). 
-<<<in future versions>>>
-When this button is pushed it opens a list with different reTHINK end points. One can chose e.g. to write a chat-message, do a video-call or a voice-message. The availability of the options depends on what kind of reTHINK client is currently available for this user.
+When the button is grey there is either no valid GUID or there is no current hyperty of available.
+When the button is blue the user can "mouse over" the button and a pop up menu starts showing a list of current available hyperties. Every link shows supported media and the brand or company name. 
+If the system is properly configured the user gets connected with the selected party.
 
  
 ##2) Create an own account
@@ -82,8 +83,47 @@ Now press the *save* button. If no error occur a user is created with a first pr
     
 (A user can have many profiles with different visibilities. Profiles can be added, changed or deleted. When the last profile is deleted the user is deleted automatically)    
   
+##3) REST API
 
+The discovery service offers a REST-API for search queries.
+The interface can be "pinged" by e.g GET https://rethink.tlabscloud.com/discovery/rest/discover
+To search eg. for "Hans Telekom" call GET https://rethink.tlabscloud.com/discovery/rest/discover/lookup?searchquery=Hans+Schmitt
 
+The answer is a JSON Object like for Example:
+
+{
+	"instanceID":"telekom1",
+	"responseCode":201,
+	"searchString":"Hans+Schmitt",
+	"results":
+			[
+				{
+				"resultNo":0,
+				"instanceID":"telekom1",
+				"hashtags":"T-Labs Telekom",
+				"description":"Hans Testprofile text text text",
+				"rethinkID":"REAyDT-tYQI2u1km9LgYj05zb1hLmy__XlIN5B1LWUQ",
+				"headline":"Hans",
+				"contacts":"Hans.Schmitt@telekom.de",
+				"hasrethinkID":"true",
+				"hyperties":
+							[
+								{
+								"url":"hyperty=hyperty%3A%2F%2Frethink-dev.tlabscloud.com%2Fd2aad579-a213-4400-9e24-af2b23dbaed8",
+								"userID":"uid=user:\\\\gmail.com\\hans.schmitt",
+								"media":"VIDEO",
+								"provider":"Deutsche Telekom"
+								},
+								{
+								"url":"hyperty=hyperty%3A%2F%2Frethink-dev.tlabscloud.com%2Fb71cd853-f657-4b6a-919b-07916bd3d50e",
+								"userID":"uid=user:\\\\gmail.com\\hans.schmitt",
+								"media":"VIDEO",
+								"provider":"Deutsche Telekom"
+								}
+							]
+				}
+			]
+}
 
 # Quick Guide Setup for Deployment
 If you want to deploy discovery service read this section
