@@ -16,19 +16,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.QueryParam;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-	
-//import org.json.simple.JSONObject;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
-	//import org.json.simple.JSONArray;
-	//import org.json.simple.parser.ParseException;
-	//import org.json.simple.parser.JSONParser;
-	
+
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
@@ -82,7 +78,6 @@ import de.telekom.rethink.discovery.GlobalAndDomainRegistryConnector;
 	  		pingAnswer.add("errorCodeCode", 0);
 	  		
 	  		return Response.ok(pingAnswer.toString(), MediaType.APPLICATION_JSON).build();
-
 	  	}	
 	
 	
@@ -154,7 +149,7 @@ import de.telekom.rethink.discovery.GlobalAndDomainRegistryConnector;
 		  						
 		  						if(gdrc.GUIDexists(rawAnswer))
 		  							{			
-		  							List hypertylist = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswer);
+		  							List hypertylist = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswer,true);
 		  						
 		  							Iterator iterator = hypertylist.iterator();
 		  						
@@ -163,19 +158,10 @@ import de.telekom.rethink.discovery.GlobalAndDomainRegistryConnector;
 		  							while(iterator.hasNext())
 		  								{
 			  							String resultline=	(String) iterator.next();
-			  							String[] part = resultline.split("#");
+			  							JsonObject JsonResultline= Json.parse(resultline).asObject();
+			  							//log.debug("##################"+resultline);
 			  							JsonObject hyperty =new JsonObject();
-			  							String combinedURL=part[0];
-			  							String[] splitURL = combinedURL.split("\\?");
-			  							String hypertyURLplusID = splitURL[1];
-			  							String[] hypertyURLplusIDField = hypertyURLplusID.split("&");
-			  							String URL =  hypertyURLplusIDField[0];
-			  							String uID =  hypertyURLplusIDField[1];
-		
-			  							hyperty.add("url",URL);
-			  							hyperty.add("userID", uID);
-			  							hyperty.add("media", part[2]);
-			  							hyperty.add("provider", part[3]);
+			  							hyperty.add("hyperty",JsonResultline);
 			  							hypertyArray.add(hyperty);  							
 		  								}
 		  							singleReturnResult.add("hyperties", hypertyArray);
@@ -186,7 +172,6 @@ import de.telekom.rethink.discovery.GlobalAndDomainRegistryConnector;
 		  			}
 		  		returnObject.add("results", results);
 		  		
-		  		//response= Response.status(201).entity(JSONString).type(MediaType.APPLICATION_JSON).build();
 		  		response= Response.status(201).entity(returnObject.toString()).type(MediaType.APPLICATION_JSON).build();
 		  		
 		  		

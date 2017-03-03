@@ -86,7 +86,7 @@ out.println("<h1>reTHINK discovery and resolving process for : "+headline+"</h1>
 
 if(gdrc.GUIDexists(rawAnswerGR))
 	{
-	List currentHyperties = gdrc.getCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR);
+	List currentHyperties = gdrc.getCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR,false);
 	
 	if(currentHyperties.size()==0)
 		out.println("GUID is valid but there are no currently running hyperties.<br>");

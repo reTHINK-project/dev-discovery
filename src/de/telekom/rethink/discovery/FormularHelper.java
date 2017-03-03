@@ -68,10 +68,23 @@ static Logger log = Logger.getLogger(FormularHelper.class);
 		}
 		
 		
+		public String getClearAnswerOfGlobalRegistry(String rawAnswer) throws IOException
+		{
+		return grConnector.getClearAnswerOfGlobalRegistry(rawAnswer);		
+		}
+		
+		
 		public String callURL(String URL, String path)
 		{
 		return	restClient.callURL(URL, path);
 		}
+		
+		public String callSecureURL(String URL, String path)
+		{
+		return	restClient.callSecureURL(URL, path);
+		}
+		
+		
 		
 		public String cleanUpString(String rawstring)
 		{

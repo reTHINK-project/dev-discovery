@@ -34,7 +34,9 @@ private String contextPath;
      */
     public AuthNFilter() {
         // TODO Auto-generated constructor stub
-    	System.out.print("reTHINK AuthenticationFilter intialized");
+    	System.out.print("reTHINK AuthenticationFilter intialized\n");
+    	 //System.out.println(getCallerClassName(this.getClass()));
+    	
     }
 
 	/**
@@ -52,10 +54,7 @@ private String contextPath;
 		// place your code here
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		
-		//SessionListener sl=new SessionListener();
-		//sl.sessionAccessed(req.getRequestedSessionId());
-		
+				
 		if(req.getSession().getAttribute("userID")!=null){
 			// pass the request along the filter chain
 			chain.doFilter(request, response);
@@ -76,5 +75,21 @@ private String contextPath;
 		// TODO Auto-generated method stub
 		contextPath=fConfig.getServletContext().getContextPath();
 	}
-
+	
+	
+	/*
+	 public static String getCallerClassName(final Class<?> clazz) {
+	        final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	        final String className = clazz.getName();
+	        boolean classFound = false;
+	        for (int i = 1; i < stackTrace.length; i++) {
+	            final StackTraceElement element = stackTrace[i];
+	            final String callerClassName = element.getClassName();
+	            // check if class name is the requested class
+	            if (callerClassName.equals(className)) classFound = true;
+	            else if (classFound) return callerClassName;
+	        }
+	        return null;
+	    }
+		*/
 }

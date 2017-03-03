@@ -68,10 +68,11 @@ for(Enumeration<Hashtable<String,String>> el=resultVector.elements();el.hasMoreE
 { 
 	Hashtable singleResult = (Hashtable) el.nextElement();		
     String GUID = helper.cleanUpString(singleResult.get("rethinkID").toString());
-    String hasGUID = helper.cleanUpString(singleResult.get("hasrethinkID").toString()) ;
+    String hasGUID = helper.cleanUpString(singleResult.get("hasrethinkID").toString()) ;  
     String rawAnswerGR = gdrc.getRawAnswerOfGlobalRegistry(helper.cleanUpString(singleResult.get("rethinkID").toString()));
     boolean GUIDexist = gdrc.GUIDexists(rawAnswerGR);
-    List currentHyperties = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR);
+    List currentHyperties = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR,false);
+   
     i++;
 %>
 <!--_____________________________RESULT 0<%out.print(i);%>_____________________________-->
@@ -86,6 +87,8 @@ if(hasGUID.equals("true"))
 		if(currentHyperties.size()>0)
 			{
 			Iterator entries=currentHyperties.iterator();
+			
+			
 			%>
 			<div id="repop_0<%out.print(i);%>" class="repop">
 			<%

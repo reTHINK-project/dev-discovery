@@ -72,7 +72,7 @@ while(it.hasNext())
     String hasGUID = helper.cleanUpString(hashtab.get("hasrethinkID").toString()) ;
     String rawAnswerGR = gdrc.getRawAnswerOfGlobalRegistry(helper.cleanUpString(hashtab.get("rethinkID").toString()));
     boolean GUIDexist = gdrc.GUIDexists(rawAnswerGR);
-    List currentHyperties = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR);
+    List currentHyperties = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR,false);
 	i++;
 %>
 <!--_____________________________FAVORITE 01_____________________________-->

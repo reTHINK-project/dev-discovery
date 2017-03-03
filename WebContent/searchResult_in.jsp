@@ -81,7 +81,7 @@ for(Enumeration<Hashtable<String,String>> el=resultVector.elements();el.hasMoreE
     String hasGUID = helper.cleanUpString(singleResult.get("hasrethinkID").toString()) ;
     String rawAnswerGR = gdrc.getRawAnswerOfGlobalRegistry(helper.cleanUpString(singleResult.get("rethinkID").toString()));
     boolean GUIDexist = gdrc.GUIDexists(rawAnswerGR);
-    List currentHyperties = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR);
+    List currentHyperties = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR,false);
 	i++;
 %>
 <!--_____________________________RESULT 0<%out.print(i);%>_____________________________-->

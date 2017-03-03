@@ -200,7 +200,7 @@ FormularHelper formularHelper;
    
 		//get Visibility for doc ID
 		String visibility= formularHelper.getVisibility(cleanUpString(singleResult.get("docID").toString()));
-		log.debug("profile "+cleanUpString(singleResult.get("docID").toString())+" is visibile for "+visibility);
+		log.debug("Profile: "+cleanUpString(singleResult.get("docID").toString())+" is visibile for "+visibility);
 		
 		
 		if(visibility.equals("all"))
@@ -229,8 +229,8 @@ FormularHelper formularHelper;
 			
 		}
 	}	 
-	log.debug("Search request for >> "+searchString+" << has result count of: "+returnVector.size()+" with policy");	
-	log.info("SearchQuery: "+searchString);
+	log.info("Search request for >> "+searchString+" << has result count of: "+returnVector.size()+" with policy");	
+
 	return returnVector;
 	}
 	
@@ -253,12 +253,13 @@ FormularHelper formularHelper;
 		
 	SolrDocumentList dlist=qr.getResults();
 	long resultNumber= dlist.getNumFound();
-	log.debug("number "+resultNumber);
-	log.debug("Search needed "+qr.getElapsedTime()+" ms");
+	log.debug("Number of results: "+resultNumber);
+	log.debug("Search needed: "+qr.getElapsedTime()+" ms");
 
-	
+	/*
 	String test= qr.getDebugMap().toString();
 	log.debug("request debug info "+test);
+	*/
 	
 	Iterator<SolrDocument> iter = dlist.iterator();
 	

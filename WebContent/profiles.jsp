@@ -84,7 +84,7 @@ for (int i=0;i<profilecount;i++)
 		GUIDexist = gdrc.GUIDexists(rawAnswerGR);
 		}
 	if(GUIDexist)
-		currentHyperties = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR);
+		currentHyperties = gdrc.saveGetCurrentHypertiesFromGlobalAndDomainRegistry(rawAnswerGR,false);
    
 %>
 

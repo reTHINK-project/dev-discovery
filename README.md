@@ -91,7 +91,7 @@ To search eg. for "Hans Telekom" call GET https://rethink.tlabscloud.com/discove
 
 The answer is a JSON Object like for Example:
 
-{
+    {
 	"instanceID":"telekom1",
 	"responseCode":201,
 	"searchString":"Hans+Schmitt",
@@ -107,21 +107,25 @@ The answer is a JSON Object like for Example:
 				"contacts":"Hans.Schmitt@telekom.de",
 				"hasrethinkID":"true",
 				"hyperties":
-							[
-								{
-								"url":"hyperty=hyperty%3A%2F%2Frethink-dev.tlabscloud.com%2Fd2aad579-a213-4400-9e24-af2b23dbaed8",
-								"userID":"uid=user:\\\\gmail.com\\hans.schmitt",
-								"media":"VIDEO",
-								"provider":"Deutsche Telekom"
-								},
-								{
-								"url":"hyperty=hyperty%3A%2F%2Frethink-dev.tlabscloud.com%2Fb71cd853-f657-4b6a-919b-07916bd3d50e",
-								"userID":"uid=user:\\\\gmail.com\\hans.schmitt",
-								"media":"VIDEO",
-								"provider":"Deutsche Telekom"
-								}
-							]
-				}
+							{
+          				"hyperty": {
+           								 "hyperty://rethink.tlabscloud.com/9fa65ac2-4338-4c81-a1f2-1747cb2c5ff9": {
+              							"resources": [
+                										"audio",
+               											"video"
+								              ],
+								              "dataSchemes": [
+								                "connection"
+								              ],
+								              "descriptor": "hyperty-catalogue://catalogue.rethink.tlabscloud.com/.well-known/hyperty/DTWebRTC",
+								              "startingTime": "2017-03-03T10:44:50Z",
+								              "hypertyID": "hyperty://rethink.tlabscloud.com/9fa65ac2-4338-4c81-a1f2-1747cb2c5ff9",
+								              "userID": "user://gmail.com/hans.schmitt",
+								              "lastModified": "2017-03-03T10:44:50Z",
+								              "expires": 3600
+								            }
+								          }
+								        }
 			]
 }
 
@@ -245,9 +249,24 @@ http://localhost:7474/browser/
 			<param-name>MariaDBstring</param-name>
 			<param-value>rethink</param-value>
 		</context-param>
+		
+4) change rethinkDomainAddresses.properties
+	During the discovery process the GUID is mapped to non, one or more entries of services
+	These entries contain a domain e.g. company.xyz.com; 
+	this property file maps the domain name company.xyz.com to the real end point of the regarded domain registry
+	e.g. **company.xyz.com=https.//rethink.dev.doaminregistry.company.xyz.com**
+	
+5) import ssl certificate of the domain registry in the trust store
+	The domain registry is contacted via SSL. Open my.keystore (password rethink) to import trusted certificates
+		
+6) change rethinkProviderNames.properties
+	The Discovery Service provides a GUI. When there is a valid GUID and a hyperty was found there is a popup menu with media type and provider name. This property file maps a URL to the regarded provider name 
 
-4) Deploy the WAR-File
-	copy the war-file simply into the webapps folder and then start tomcat	 
+
+7) Deploy the WAR-File
+	copy the war-file simply into the webapps folder and then start tomcat
+	
+		 
 
 # Quick Guide Setup for Developer 
 
@@ -386,10 +405,21 @@ Additional libraries and configurations in order to run the discovery service:
 			<param-name>MariaDBstring</param-name>
 			<param-value>rethink</param-value>
 		</context-param>
+		
+4) change rethinkDomainAddresses.properties
+	During the discovery process the GUID is mapped to non, one or more entries of services
+	These entries contain a domain e.g. company.xyz.com; 
+	this property file maps the domain name company.xyz.com to the real end point of the regarded domain registry
+	e.g. **company.xyz.com=https.//rethink.dev.doaminregistry.company.xyz.com**
 	
-	
-4) Install JSON	H
+5) import ssl certificate of the domain registry in the trust store
+	The domain registry is contacted via SSL. Open my.keystore (password rethink) to import trusted certificates
+		
+6) change rethinkProviderNames.properties
+	The Discovery Service provides a GUI. When there is a valid GUID and a hyperty was found there is a popup menu with media type and provider name. This property file maps a URL to the regarded provider name 
 
 
-The service handles JSON Objects and uses json-simple-1.1.jar so download http://www.java2s.com/Code/Jar/j/json-simple.htm
-Include it in your buildpath / and at runtime
+7) Deploy the WAR-File
+	copy the war-file simply into the webapps folder and then start tomcat
+			
+	
