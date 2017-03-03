@@ -1,0 +1,75 @@
+@charset "utf-8";
+/* CSS Document */
+.repop{
+	position: absolute;
+	top: 0px;
+	left: 90px;
+	width: 350px;
+	z-index: 100;
+	display: none;
+}
+.rp_call{
+	position: relative;
+	width: 350px;
+	height: 51px;
+	background: url('../images/rp_call_01.png');
+	display: block;
+	color: #FFF;
+}
+.rp_call:hover{
+	background: url('../images/rp_call_02.png');
+	color: #009DDE;
+}
+.rp_chat{
+	position: relative;
+	width: 350px;
+	height: 51px;
+	background: url('../images/rp_chat_01.png');
+	display: block;
+	color: #FFF;
+}
+.rp_chat:hover{
+	background: url('../images/rp_chat_02.png');
+	color: #009DDE;
+}
+.rp_video{
+	position: relative;
+	width: 350px;
+	height: 51px;
+	background: url('../images/rp_video_01.png');
+	display: block;
+	color: #FFF;
+}
+.rp_video:hover{
+	background: url('../images/rp_video_02.png');
+	color: #009DDE;
+}
+
+.rp_text1{	
+	font-family: 'Lato', sans-serif;	
+	font-weight: 900;
+	font-size: 16px;
+	line-height: 51px;
+	margin-left: 80px;
+}
+.rp_text2a{	
+	font-family: 'Lato', sans-serif;	
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 51px;
+	margin-left: 30px;
+}
+.rp_text2b{	
+	font-family: 'Lato', sans-serif;	
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 51px;
+	margin-left: 27px;
+}
+.rp_text2c{	
+	font-family: 'Lato', sans-serif;	
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 51px;
+	margin-left: 20px;
+}
